@@ -1,1 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARAZIN</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #ffffff;
+  --off:   #f7f7f5;
+  --light: #e8e8e5;
+  --mid:   #9a9a96;
+  --dark:  #2a2a2a;
+  --black: #0a0a0a;
+  --gold:  #b8944a;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--white); color: var(--black); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; overflow-x: hidden; cursor: none; }
 
+/* ── CURSOR ── */
+#cur {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 32px; height: 32px;
+  transform: translate(-50%, -50%);
+  transition: transform .15s ease;
+}
+#cur svg { width: 100%; height: 100%; }
+#cur-ring {
+  position: fixed; z-index: 9998; pointer-events: none;
+  width: 50px; height: 50px;
+  border: 1px solid rgba(10,10,10,.18);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width .35s, height .35s, opacity .35s, border-color .35s;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem 4vw;
+}
+nav.dark-nav { mix-blend-mode: normal; }
+.nav-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--white); text-decoration: none;
+}
+nav.light .nav-logo { color: var(--black); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.7); text-decoration: none; transition: color .2s;
+}
+nav.light .nav-links a { color: var(--mid); }
+.nav-links a:hover { color: var(--white); }
+nav.light .nav-links a:hover { color: var(--black); }
+.nav-shop {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.7); text-decoration: none;
+  border: 1px solid rgba(255,255,255,.22);
+  padding: .45rem 1.1rem; cursor: none; transition: color .2s, border-color .2s;
+}
+nav.light .nav-shop { color: var(--mid); border-color: var(--light); }
+nav.light .nav-shop:hover { color: var(--black); border-color: var(--dark); }
+
+/* ── HERO ── */
+.hero {
+  height: 100vh; position: relative;
+  overflow: hidden; background: var(--black);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 0 5vw 8vh;
+}
+.hero-bg { position: absolute; inset: 0; }
+.hero-bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(.48) contrast(1.08);
+  transform-origin: center center;
+}
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,.92) 0%, rgba(10,10,10,.3) 45%, transparent 75%);
+}
+.hero-tag {
+  position: relative; z-index: 2;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+  margin-bottom: 1.6rem;
+  opacity: 0; transform: translateY(10px);
+}
+.hero-h1 {
+  position: relative; z-index: 2;
+  font-size: clamp(2.4rem, 5.5vw, 5.2rem);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.1; letter-spacing: -.01em;
+  max-width: 700px;
+  opacity: 0; transform: translateY(22px);
+}
+.hero-h1 em { font-style: normal; font-weight: 400; color: rgba(255,255,255,.55); }
+.hero-sub {
+  position: relative; z-index: 2;
+  font-size: .88rem; color: rgba(255,255,255,.4);
+  margin-top: 1.4rem; max-width: 400px; line-height: 1.8;
+  opacity: 0; transform: translateY(16px);
+}
+.hero-cta {
+  position: relative; z-index: 2;
+  display: flex; gap: 1rem; margin-top: 2.4rem;
+  opacity: 0; transform: translateY(14px);
+}
+.btn-primary {
+  background: var(--white); color: var(--black);
+  padding: .85rem 2.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; cursor: none; display: inline-block;
+  transition: background .2s, transform .15s;
+}
+.btn-primary:hover { background: var(--off); transform: translateY(-1px); }
+.btn-secondary {
+  background: transparent; color: rgba(255,255,255,.65);
+  padding: .85rem 2.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,.18);
+  text-decoration: none; cursor: none; display: inline-block;
+  transition: color .2s, border-color .2s, transform .15s;
+}
+.btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,.5); transform: translateY(-1px); }
+
+.scroll-hint {
+  position: absolute; bottom: 2.5vh; left: 50%; transform: translateX(-50%);
+  z-index: 2; opacity: 0; display: flex; flex-direction: column; align-items: center; gap: .5rem;
+}
+.scroll-hint span {
+  font-family: 'DM Mono', monospace; font-size: .52rem;
+  letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.3);
+}
+.scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent); animation: sl 1.8s ease infinite; }
+@keyframes sl { 0%{transform:scaleY(0);transform-origin:top;} 49%{transform:scaleY(1);transform-origin:top;} 50%{transform:scaleY(1);transform-origin:bottom;} 100%{transform:scaleY(0);transform-origin:bottom;} }
+
+/* ── MARQUEE ── */
+.mbar { background: var(--black); border-top: 1px solid #1a1a1a; padding: .85rem 0; overflow: hidden; white-space: nowrap; }
+.mtrack { display: inline-flex; animation: mq 32s linear infinite; }
+.mi { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.6); padding: 0 2.5rem; }
+.msep { color: rgba(184,148,74,.5); font-size: .4rem; vertical-align: middle; }
+@keyframes mq { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+/* ── SCROLLYTELLING: CAR ZOOM ── */
+.zoom-section { min-height: 500vh; position: relative; background: var(--black); }
+.zoom-sticky {
+  position: sticky; top: 0; height: 100vh;
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+}
+.zoom-img {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.zoom-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(.6) contrast(1.08);
+  transform-origin: center 35%;
+}
+/* Interior image - hidden initially */
+.interior-img {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+}
+.interior-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: brightness(.7) contrast(1.05);
+  transform-origin: center center;
+}
+
+/* ── STRIP DIVIDER ── */
+.strip { height: 1px; background: var(--light); }
+.strip-dark { height: 1px; background: rgba(255,255,255,.08); }
+
+/* ── SECTION UTILS ── */
+.section { padding: 8rem 5vw; }
+.sec-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .9rem;
+}
+.sec-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--light); }
+.sec-title {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 300; letter-spacing: -.02em;
+  line-height: 1.1; color: var(--black);
+}
+.sec-title strong { font-weight: 500; }
+.sec-body { font-size: .88rem; color: var(--mid); line-height: 1.85; max-width: 420px; margin-top: 1rem; }
+
+/* ── PRODUCTS ── */
+.products-wrap { background: var(--white); }
+.prod-header {
+  padding: 7rem 5vw 0;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  border-top: 1px solid var(--light);
+}
+.prod-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  margin-top: 4rem;
+  border-top: 1px solid var(--light);
+  border-left: 1px solid var(--light);
+}
+.p-card {
+  border-right: 1px solid var(--light);
+  border-bottom: 1px solid var(--light);
+  cursor: none; position: relative; overflow: hidden;
+  transition: background .25s;
+}
+.p-card:hover { background: var(--off); }
+.p-img { width: 100%; aspect-ratio: 1; overflow: hidden; position: relative; background: var(--off); display: flex; align-items: center; justify-content: center; }
+.p-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s cubic-bezier(.23,1,.32,1);
+}
+.p-img.contain img { object-fit: contain; padding: 1.5rem; }
+.p-card:hover .p-img img { transform: scale(1.04); }
+.p-badge {
+  position: absolute; top: .9rem; left: .9rem;
+  font-family: 'DM Mono', monospace; font-size: .52rem;
+  letter-spacing: .14em; text-transform: uppercase;
+  background: var(--black); color: var(--white);
+  padding: .18rem .65rem;
+}
+.p-info { padding: 1.4rem; border-top: 1px solid var(--light); }
+.p-name { font-size: .82rem; font-weight: 500; color: var(--black); margin-bottom: .3rem; line-height: 1.3; }
+.p-desc { font-size: .73rem; color: var(--mid); line-height: 1.6; margin-bottom: 1.1rem; }
+.p-row { display: flex; align-items: center; justify-content: space-between; }
+.p-price { font-size: .9rem; font-weight: 500; color: var(--black); letter-spacing: -.01em; }
+.add-btn {
+  width: 30px; height: 30px; border: 1px solid var(--light);
+  background: transparent; color: var(--black); cursor: none; font-size: .95rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.add-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* ── TAILLIGHT FEATURE ── */
+.feature-split {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 88vh; border-top: 1px solid var(--light);
+}
+.feat-img { position: relative; overflow: hidden; background: var(--black); }
+.feat-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.75) contrast(1.05); transition: transform .1s; }
+.feat-cnt {
+  background: var(--black); color: var(--white);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 6rem 5vw;
+}
+.feat-cnt .sec-eyebrow { color: rgba(255,255,255,.5); }
+.feat-cnt .sec-eyebrow::before { background: rgba(255,255,255,.2); }
+.feat-cnt .sec-title { color: var(--white); }
+.feat-cnt .sec-body { color: rgba(255,255,255,.6); max-width: 360px; }
+.feat-list { margin-top: 2.8rem; display: flex; flex-direction: column; }
+.feat-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.6rem 0; border-top: 1px solid rgba(255,255,255,.07);
+  cursor: none; transition: padding-left .3s;
+}
+.feat-item:last-child { border-bottom: 1px solid rgba(255,255,255,.07); }
+.feat-item:hover { padding-left: .4rem; }
+.fi-name { font-size: .82rem; font-weight: 400; color: var(--white); margin-bottom: .25rem; }
+.fi-sub { font-family: 'DM Mono', monospace; font-size: .56rem; color: rgba(255,255,255,.5); letter-spacing: .12em; text-transform: uppercase; }
+.fi-price { font-size: .95rem; font-weight: 500; color: var(--gold); }
+
+/* ── DOOR PANEL FEATURE ── */
+.panel-split {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 82vh; border-top: 1px solid var(--light);
+}
+.panel-left { background: var(--off); display: flex; align-items: center; justify-content: center; padding: 4rem; overflow: hidden; }
+.panel-left img { width: 100%; height: 100%; object-fit: cover; }
+.panel-right { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: 6rem 5vw; }
+.panel-specs { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--light); }
+.ps { background: var(--white); padding: 1.3rem; }
+.ps-lbl { font-family: 'DM Mono', monospace; font-size: .54rem; color: var(--mid); letter-spacing: .18em; text-transform: uppercase; margin-bottom: .4rem; }
+.ps-val { font-size: .82rem; font-weight: 500; color: var(--black); }
+
+/* ── PUDDLE LIGHT ── */
+.puddle-split {
+  display: grid; grid-template-columns: 55% 45%;
+  min-height: 80vh; border-top: 1px solid var(--light);
+}
+.puddle-img { position: relative; overflow: hidden; background: var(--black); }
+.puddle-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.8) contrast(1.05); }
+.puddle-cnt { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: 6rem 5vw; }
+
+/* ── DISPLAY KEYS ── */
+.keys-section { background: var(--black); padding: 8rem 5vw; border-top: 1px solid rgba(255,255,255,.06); }
+.keys-section .sec-eyebrow { color: rgba(255,255,255,.5); }
+.keys-section .sec-eyebrow::before { background: rgba(255,255,255,.15); }
+.keys-section .sec-title { color: var(--white); }
+.keys-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,.06); margin-top: 4rem; }
+.k-card { background: var(--black); padding: 3rem 2.5rem; cursor: none; transition: background .25s; }
+.k-card:hover { background: #111; }
+.k-img { height: 160px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+.k-img img { max-height: 140px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 24px rgba(0,0,0,.4)); transition: transform .4s, filter .3s; }
+.k-card:hover .k-img img { transform: scale(1.04); filter: drop-shadow(0 6px 32px rgba(184,148,74,.25)); }
+.k-name { font-size: .82rem; font-weight: 500; color: var(--white); margin-bottom: .4rem; }
+.k-sub { font-size: .73rem; color: rgba(255,255,255,.55); line-height: 1.65; margin-bottom: 1.4rem; }
+.k-price { font-size: .95rem; font-weight: 500; color: var(--gold); }
+
+/* ── CARPLAY ── */
+.cp-split {
+  display: grid; grid-template-columns: 45% 55%;
+  min-height: 80vh; border-top: 1px solid var(--light);
+}
+.cp-img { background: var(--off); display: flex; align-items: center; justify-content: center; padding: 5rem; }
+.cp-img img { max-width: 280px; object-fit: contain; filter: drop-shadow(0 8px 40px rgba(0,0,0,.15)); }
+.cp-cnt { background: var(--white); display: flex; flex-direction: column; justify-content: center; padding: 6rem 5vw; }
+.cp-tags { display: flex; gap: .6rem; margin: 1.5rem 0; }
+.cp-tag { font-family: 'DM Mono', monospace; font-size: .56rem; letter-spacing: .16em; padding: .35rem .9rem; border: 1px solid var(--light); color: var(--mid); }
+.cp-feats { margin-top: 1.8rem; display: flex; flex-direction: column; }
+.cpf { display: flex; gap: 1.4rem; padding: 1.4rem 0; border-bottom: 1px solid var(--light); }
+.cpf:first-child { border-top: 1px solid var(--light); }
+.cpfn { font-family: 'DM Mono', monospace; font-size: .56rem; color: var(--mid); flex-shrink: 0; padding-top: .25rem; }
+.cpft { font-size: .84rem; font-weight: 400; color: var(--black); margin-bottom: .2rem; }
+.cpfs { font-size: .73rem; color: var(--mid); line-height: 1.55; }
+
+/* ── REVIEWS ── */
+.rev-section { background: var(--off); padding: 8rem 5vw; border-top: 1px solid var(--light); }
+.rev-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--light); margin-top: 4rem; }
+.rv { background: var(--off); padding: 2.5rem 2rem; }
+.rv-stars { font-size: .65rem; letter-spacing: .14em; color: var(--black); margin-bottom: 1.2rem; }
+.rv-q { font-size: .9rem; font-weight: 300; color: var(--black); line-height: 1.75; margin-bottom: 1.8rem; font-style: italic; }
+.rv-name { font-size: .78rem; font-weight: 500; color: var(--black); }
+.rv-meta { font-family: 'DM Mono', monospace; font-size: .56rem; color: var(--mid); letter-spacing: .12em; text-transform: uppercase; margin-top: .2rem; }
+
+/* ── WHY ── */
+.why-wrap {
+  background: var(--white); padding: 8rem 5vw; border-top: 1px solid var(--light);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: start;
+}
+.w-list { display: flex; flex-direction: column; margin-top: 3.5rem; }
+.wi { padding: 1.8rem 0; border-bottom: 1px solid var(--light); display: flex; gap: 1.8rem; transition: padding-left .3s; cursor: none; }
+.wi:first-child { border-top: 1px solid var(--light); }
+.wi:hover { padding-left: .4rem; }
+.win { font-family: 'DM Mono', monospace; font-size: .56rem; color: var(--mid); flex-shrink: 0; padding-top: .25rem; }
+.wit { font-size: .86rem; font-weight: 400; color: var(--black); margin-bottom: .3rem; }
+.wid { font-size: .76rem; color: var(--mid); line-height: 1.7; }
+.why-stats { padding-top: 3.5rem; }
+.bstat { padding: 2.5rem 0; border-bottom: 1px solid var(--light); }
+.bstat:last-child { border-bottom: none; }
+.bnum { font-size: clamp(3rem, 6vw, 5rem); font-weight: 300; letter-spacing: -.03em; color: var(--black); line-height: 1; }
+.bcap { font-size: .76rem; color: var(--mid); line-height: 1.65; margin-top: .5rem; max-width: 240px; }
+.route { display: flex; align-items: center; gap: .8rem; margin-top: 1rem; }
+.rdot { width: 5px; height: 5px; border-radius: 50%; background: var(--black); }
+.rline { flex: 1; height: 1px; background: repeating-linear-gradient(90deg, var(--light) 0, var(--light) 4px, transparent 4px, transparent 8px); }
+.rcity { font-family: 'DM Mono', monospace; font-size: .58rem; color: var(--mid); }
+
+/* ── NEWSLETTER ── */
+.nl-wrap {
+  background: var(--black); padding: 7rem 5vw; border-top: 1px solid rgba(255,255,255,.06);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+}
+.nl-wrap .sec-eyebrow { color: rgba(255,255,255,.5); }
+.nl-wrap .sec-eyebrow::before { background: rgba(255,255,255,.12); }
+.nl-wrap .sec-title { color: var(--white); }
+.nl-wrap .sec-body { color: rgba(255,255,255,.3); }
+.nl-form { display: flex; margin-top: 2.5rem; }
+.nl-in { flex:1; background: transparent; border:1px solid rgba(255,255,255,.1); border-right:none; color:var(--white); padding:.9rem 1.2rem; font-family:'Inter',sans-serif; font-size:.84rem; font-weight:300; outline:none; transition:border-color .2s; }
+.nl-in::placeholder { color: rgba(255,255,255,.2); }
+.nl-in:focus { border-color: rgba(255,255,255,.28); }
+.nl-btn { background:var(--white); color:var(--black); padding:.9rem 1.8rem; font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; border:none; cursor:none; transition:background .2s; }
+.nl-btn:hover { background: var(--off); }
+.nl-note { font-family:'DM Mono',monospace; font-size:.54rem; color:rgba(255,255,255,.45); letter-spacing:.1em; margin-top:.9rem; }
+
+/* ── FOOTER ── */
+footer { background: var(--black); border-top:1px solid rgba(255,255,255,.06); padding: 5rem 5vw 3rem; }
+.f-logo { font-family:'Inter',sans-serif; font-size:2.8rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--white); text-decoration:none; display:block; margin-bottom:1.2rem; line-height:1; }
+.f-top { display:grid; grid-template-columns:2.5fr 1fr 1fr 1fr; gap:4rem; padding-bottom:4rem; border-bottom:1px solid rgba(255,255,255,.06); }
+.f-tagline { font-size:.78rem; color:rgba(255,255,255,.5); line-height:1.75; max-width:220px; }
+.f-col-t { font-family:'DM Mono',monospace; font-size:.56rem; letter-spacing:.24em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:1.4rem; }
+.f-links { list-style:none; display:flex; flex-direction:column; gap:.8rem; }
+.f-links a { color:rgba(255,255,255,.55); text-decoration:none; font-size:.8rem; transition:color .2s; }
+.f-links a:hover { color:var(--white); }
+.f-bot { padding-top:2rem; display:flex; justify-content:space-between; align-items:center; }
+.f-copy { font-family:'DM Mono',monospace; font-size:.54rem; color:rgba(255,255,255,.45); letter-spacing:.12em; }
+.f-soc { display:flex; gap:.8rem; }
+.sb { font-family:'DM Mono',monospace; font-size:.54rem; letter-spacing:.12em; color:rgba(255,255,255,.55); text-decoration:none; border:1px solid rgba(255,255,255,.09); padding:.4rem .85rem; transition:color .2s,border-color .2s; cursor:none; }
+.sb:hover { color:var(--white); border-color:rgba(255,255,255,.35); }
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(24px); }
+
+@media(max-width:900px){
+  .prod-grid{grid-template-columns:repeat(2,1fr);}
+  .feature-split,.panel-split,.puddle-split,.cp-split,.why-wrap,.nl-wrap{grid-template-columns:1fr;}
+  .keys-grid{grid-template-columns:1fr;}
+  .rev-grid{grid-template-columns:1fr;}
+  .f-top{grid-template-columns:1fr 1fr;gap:2.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- BMW CURSOR -->
+<div id="cur">
+  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="16" cy="16" r="15" stroke="#0a0a0a" stroke-width="1.2" fill="none"/>
+    <circle cx="16" cy="16" r="11.5" stroke="#0a0a0a" stroke-width=".7" fill="none"/>
+    <path d="M16 4.5 A11.5 11.5 0 0 1 27.5 16 L16 16 Z" fill="#0a0a0a"/>
+    <path d="M16 27.5 A11.5 11.5 0 0 1 4.5 16 L16 16 Z" fill="#0a0a0a"/>
+    <path d="M4.5 16 A11.5 11.5 0 0 1 16 4.5 L16 16 Z" fill="white"/>
+    <path d="M27.5 16 A11.5 11.5 0 0 1 16 27.5 L16 16 Z" fill="white"/>
+    <circle cx="16" cy="16" r="15" stroke="#0a0a0a" stroke-width="1.2" fill="none"/>
+  </svg>
+</div>
+<div id="cur-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Carazin</a>
+  <ul class="nav-links">
+    <li><a href="#products">Shop</a></li>
+    <li><a href="#taillights">Lighting</a></li>
+    <li><a href="#carplay">CarPlay</a></li>
+    <li><a href="#keys">Keys</a></li>
+  </ul>
+  <a href="#nl" class="nav-shop">Order Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <img id="hero-img" src="assets/img_01.jpg" alt="BMW M3">
+  </div>
+  <div class="hero-tag" id="htag">Vancouver · Premium Automotive Accessories</div>
+  <h1 class="hero-h1" id="hh1">Details matter.</h1>
+  <p class="hero-sub" id="hsub">Precision accessories for the driver who notices everything.</p>
+  <div class="hero-cta" id="hcta">
+    <a href="#products" class="btn-primary">Shop the collection</a>
+    <a href="#story" class="btn-secondary">Explore</a>
+  </div>
+  <div class="scroll-hint" id="sc">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mbar">
+  <div class="mtrack">
+    <span class="mi">Carazin</span><span class="msep">◆</span>
+    <span class="mi">M4 CS Taillights</span><span class="msep">◆</span>
+    <span class="mi">Ambient Lighting</span><span class="msep">◆</span>
+    <span class="mi">Wireless CarPlay</span><span class="msep">◆</span>
+    <span class="mi">Door Projectors</span><span class="msep">◆</span>
+    <span class="mi">Display Keys</span><span class="msep">◆</span>
+    <span class="mi">Dashcams</span><span class="msep">◆</span>
+    <span class="mi">Radar Detectors</span><span class="msep">◆</span>
+    <span class="mi">Vancouver BC</span><span class="msep">◆</span>
+    <span class="mi">Carazin</span><span class="msep">◆</span>
+    <span class="mi">M4 CS Taillights</span><span class="msep">◆</span>
+    <span class="mi">Ambient Lighting</span><span class="msep">◆</span>
+    <span class="mi">Wireless CarPlay</span><span class="msep">◆</span>
+    <span class="mi">Door Projectors</span><span class="msep">◆</span>
+    <span class="mi">Display Keys</span><span class="msep">◆</span>
+    <span class="mi">Dashcams</span><span class="msep">◆</span>
+    <span class="mi">Radar Detectors</span><span class="msep">◆</span>
+    <span class="mi">Vancouver BC</span><span class="msep">◆</span>
+  </div>
+</div>
+
+<!-- SCROLLYTELLING: CAR ZOOM → INTERIOR -->
+<div class="zoom-section" id="story">
+  <div class="zoom-sticky" id="zoom-sticky">
+    <!-- Exterior car -->
+    <div class="zoom-img" id="zoom-ext">
+      <img id="zoom-car" src="assets/img_02.jpg" alt="BMW M3">
+    </div>
+    <!-- Interior -->
+    <div class="interior-img" id="zoom-int">
+      <img id="zoom-interior" src="assets/img_03.webp" alt="BMW Interior Ambient Lighting">
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products-wrap" id="products">
+  <div class="prod-header">
+    <div>
+      <div class="sec-eyebrow">The Collection</div>
+      <div class="sec-title" style="font-size:clamp(1.6rem,3vw,2.6rem);">Everything your build needs.</div>
+    </div>
+    <a href="#" style="font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--light);padding-bottom:.2rem;cursor:none;">View all</a>
+  </div>
+
+  <div class="prod-grid">
+
+    <!-- 1: Ambient Lighting -->
+    <div class="p-card reveal">
+      <div class="p-img"><img src="assets/img_04.jpg" alt="Ambient Lighting"><div class="p-badge">Hot</div></div>
+      <div class="p-info">
+        <div class="p-name">Interior Ambient Strip Kit</div>
+        <div class="p-desc">16M colour, app + music sync. 5-min peel-and-stick install, any car.</div>
+        <div class="p-row"><span class="p-price">$38.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 2: Radar Detector -->
+    <div class="p-card reveal">
+      <div class="p-img"><img src="assets/img_05.jpg" alt="Radar Detector"><div class="p-badge">Bestseller</div></div>
+      <div class="p-info">
+        <div class="p-name">Long-Range Radar Detector</div>
+        <div class="p-desc">360° detection, GPS auto-learn, OLED display. All Canadian bands.</div>
+        <div class="p-row"><span class="p-price">$79.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 3: Wireless CarPlay Adapter -->
+    <div class="p-card reveal">
+      <div class="p-img contain"><img src="assets/img_06.jpg" alt="Wireless CarPlay Adapter"><div class="p-badge">Top Pick</div></div>
+      <div class="p-info">
+        <div class="p-name">Wireless CarPlay + Android Auto</div>
+        <div class="p-desc">One dongle converts any wired OEM system. Pair once, auto-connects every drive.</div>
+        <div class="p-row"><span class="p-price">$59.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 4: Door Panel with Ambient -->
+    <div class="p-card reveal">
+      <div class="p-img"><img src="assets/img_07.jpg" alt="Ambient Door Panel"><div class="p-badge">Upgrade</div></div>
+      <div class="p-info">
+        <div class="p-name">OEM Ambient Light Door Panel</div>
+        <div class="p-desc">Full replacement panel with integrated gradient LED. Looks completely factory-fitted.</div>
+        <div class="p-row"><span class="p-price">$249.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 5: Universal Display Fob -->
+    <div class="p-card reveal">
+      <div class="p-img contain"><img src="assets/img_08.jpg" alt="Display Smart Fob"><div class="p-badge">New</div></div>
+      <div class="p-info">
+        <div class="p-name">Universal Smart Display Fob</div>
+        <div class="p-desc">Internal module swap for any OEM remote. OLED touchscreen, custom logo engraving.</div>
+        <div class="p-row"><span class="p-price">$99.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 6: Puddle Light -->
+    <div class="p-card reveal">
+      <div class="p-img"><img src="assets/img_09.jpg" alt="Puddle Projector"><div class="p-badge">New</div></div>
+      <div class="p-info">
+        <div class="p-name">Animated Puddle Light Projectors</div>
+        <div class="p-desc">AMG One, M Power, Porsche or custom moving logo projection on ground.</div>
+        <div class="p-row"><span class="p-price">$64.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 7: BMW Display Key -->
+    <div class="p-card reveal">
+      <div class="p-img contain"><img src="assets/img_10.avif" alt="BMW Display Key"><div class="p-badge">Premium</div></div>
+      <div class="p-info">
+        <div class="p-name">BMW OLED Display Key</div>
+        <div class="p-desc">G20 / G80 / G82 series. Live screen shows lock status, battery, animations.</div>
+        <div class="p-row"><span class="p-price">$129.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+    <!-- 8: M4 CS Taillights -->
+    <div class="p-card reveal">
+      <div class="p-img"><img src="assets/img_11.webp" alt="M4 CS Taillights"><div class="p-badge">Exclusive</div></div>
+      <div class="p-info">
+        <div class="p-name">M4 CS Style Taillights</div>
+        <div class="p-desc">CSL laser-look sequential taillights for M3 G80 / 3 Series G20. Plug & play.</div>
+        <div class="p-row"><span class="p-price">$699.99</span><button class="add-btn">+</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TAILLIGHT FEATURE -->
+<div class="feature-split" id="taillights">
+  <div class="feat-img">
+    <img src="assets/img_12.webp" alt="M4 CS Style Taillights" style="object-position:center center;">
+  </div>
+  <div class="feat-cnt">
+    <div class="sec-eyebrow">Exclusive Drop</div>
+    <div class="sec-title" style="color:var(--white);">M4 CS Style<br>Taillights.</div>
+    <p class="sec-body" style="color:rgba(255,255,255,.38);max-width:340px;margin-top:1rem;">The CSL laser sequential look — now an OEM-fit upgrade for your M3 G80 or 3 Series G20. Sequential turn, flowing LED signature, plug & play wiring. Installs in an afternoon.</p>
+    <div class="feat-list">
+      <div class="feat-item reveal">
+        <div><div class="fi-name">CSL Laser Style Taillights → M3 G80</div><div class="fi-sub">OEM-fit · Sequential · Plug & play</div></div>
+        <div class="fi-price">$699.99</div>
+      </div>
+      <div class="feat-item reveal">
+        <div><div class="fi-name">CSL Laser Style Taillights → 3 Series G20</div><div class="fi-sub">Matching look · Full LED · Direct fit</div></div>
+        <div class="fi-price">$649.99</div>
+      </div>
+    </div>
+    <div style="margin-top:2.5rem;"><a href="#" class="btn-primary">Shop Taillights</a></div>
+  </div>
+</div>
+
+<!-- DOOR PANEL FEATURE -->
+<div class="panel-split" id="panels">
+  <div class="panel-left">
+    <img src="assets/img_13.jpg" alt="Ambient Door Panel">
+  </div>
+  <div class="panel-right">
+    <div class="sec-eyebrow">Interior Upgrade</div>
+    <div class="sec-title">Built-in ambient<br>door panels.</div>
+    <p class="sec-body">Full door panel replacements with integrated gradient LED lighting. Looks completely OEM. Available for BMW, Audi, and Mercedes — transforms the entire cabin feel without aftermarket aesthetics.</p>
+    <div class="panel-specs">
+      <div class="ps"><div class="ps-lbl">Fitment</div><div class="ps-val">BMW · Audi · Mercedes</div></div>
+      <div class="ps"><div class="ps-lbl">LED Type</div><div class="ps-val">Gradient · 16M colours</div></div>
+      <div class="ps"><div class="ps-lbl">Install</div><div class="ps-val">Direct panel swap</div></div>
+      <div class="ps"><div class="ps-lbl">Price</div><div class="ps-val" style="font-weight:500;">$249.99</div></div>
+    </div>
+    <div style="margin-top:2.5rem;"><a href="#" class="btn-primary">Shop Panels</a></div>
+  </div>
+</div>
+
+<!-- PUDDLE LIGHT FEATURE -->
+<div class="puddle-split" id="puddles">
+  <div class="puddle-img">
+    <img src="assets/img_14.webp" alt="Puddle Light Projector">
+  </div>
+  <div class="puddle-cnt">
+    <div class="sec-eyebrow">Under-door Lighting</div>
+    <div class="sec-title">Moving puddle<br>projectors.</div>
+    <p class="sec-body">Open the door and a full-colour animated logo appears on the ground beneath. AMG One, M Power Motorsport, Porsche crest — or send us your own design.</p>
+    <div class="panel-specs" style="margin-top:2.5rem;">
+      <div class="ps"><div class="ps-lbl">Logos</div><div class="ps-val">AMG · M Power · Custom</div></div>
+      <div class="ps"><div class="ps-lbl">Output</div><div class="ps-val">20W · IP67 rated</div></div>
+      <div class="ps"><div class="ps-lbl">Animation</div><div class="ps-val">Rotating · Fade · Static</div></div>
+      <div class="ps"><div class="ps-lbl">Price / pair</div><div class="ps-val" style="font-weight:500;">$64.99</div></div>
+    </div>
+    <div style="margin-top:2.5rem;"><a href="#" class="btn-primary">Order Yours</a></div>
+  </div>
+</div>
+
+<!-- DISPLAY KEYS -->
+<section class="keys-section" id="keys">
+  <div class="sec-eyebrow">Smart Accessories</div>
+  <div class="sec-title" style="color:var(--white);">Display car keys.</div>
+  <p style="font-size:.84rem;color:rgba(255,255,255,.55);max-width:460px;line-height:1.85;margin-top:1rem;">Replace your OEM remote with a smart key featuring a live display. Lock, unlock, check status — done properly.</p>
+  <div class="keys-grid">
+    <div class="k-card reveal">
+      <div class="k-img"><img src="assets/img_15.avif" alt="BMW Display Key"></div>
+      <div class="k-name">BMW OLED Display Key</div>
+      <div class="k-sub">G20 / G80 / G82 series. Live screen, lock status, battery level, custom animations.</div>
+      <div class="k-price">$129.99</div>
+    </div>
+    <div class="k-card reveal">
+      <div class="k-img"><img src="assets/img_16.avif" alt="Mercedes Display Key"></div>
+      <div class="k-name">Mercedes Display Smart Key</div>
+      <div class="k-sub">C / E / S / GLE class. Touchscreen fob with ambient-matched LED ring.</div>
+      <div class="k-price">$139.99</div>
+    </div>
+    <div class="k-card reveal">
+      <div class="k-img"><img src="assets/img_17.jpg" alt="Universal Display Fob"></div>
+      <div class="k-name">Universal Smart Fob</div>
+      <div class="k-sub">Module swap for any OEM remote. OLED touchscreen. Custom logo engraving on request.</div>
+      <div class="k-price">$99.99</div>
+    </div>
+  </div>
+</section>
+
+<!-- CARPLAY -->
+<div class="cp-split" id="carplay">
+  <div class="cp-img">
+    <img src="assets/img_18.jpg" alt="Wireless CarPlay Adapter">
+  </div>
+  <div class="cp-cnt">
+    <div class="sec-eyebrow">Connectivity</div>
+    <div class="sec-title">Wireless CarPlay<br>& Android Auto.</div>
+    <p class="sec-body">One small dongle converts your wired factory system to completely wireless. Pair once — auto-connects every time you start the car. Nothing else to do.</p>
+    <div class="cp-tags">
+      <span class="cp-tag">Apple CarPlay</span>
+      <span style="color:var(--mid);font-size:.75rem;">+</span>
+      <span class="cp-tag">Android Auto</span>
+    </div>
+    <div class="cp-feats">
+      <div class="cpf"><span class="cpfn">01</span><div><div class="cpft">Auto-connects every drive</div><div class="cpfs">Pair once — never plug in again</div></div></div>
+      <div class="cpf"><span class="cpfn">02</span><div><div class="cpft">Works with all OEM systems</div><div class="cpfs">Any brand with factory wired CarPlay or Android Auto</div></div></div>
+      <div class="cpf"><span class="cpfn">03</span><div><div class="cpft">Full native feature support</div><div class="cpfs">Maps, calls, music — nothing stripped away</div></div></div>
+    </div>
+    <div style="margin-top:2.5rem;"><a href="#" class="btn-primary">Shop Adapter — $59.99</a></div>
+  </div>
+</div>
+
+<!-- REVIEWS -->
+<div class="rev-section">
+  <div class="sec-eyebrow">Real owners</div>
+  <div class="sec-title">They noticed the difference.</div>
+  <div class="rev-grid">
+    <div class="rv reveal">
+      <div class="rv-stars">★★★★★</div>
+      <p class="rv-q">"The M4 CS taillights on my G80 are unreal. Every person at the meet came over to look. Plug and play, zero issues."</p>
+      <div class="rv-name">Marcus T.</div><div class="rv-meta">Vancouver · BMW M3 G80</div>
+    </div>
+    <div class="rv reveal">
+      <div class="rv-stars">★★★★★</div>
+      <p class="rv-q">"Wireless CarPlay adapter — single best purchase for my car. Connected once, never touched a cable again. Flawless for months."</p>
+      <div class="rv-name">Priya K.</div><div class="rv-meta">Burnaby · Verified Buyer</div>
+    </div>
+    <div class="rv reveal">
+      <div class="rv-stars">★★★★★</div>
+      <p class="rv-q">"Puddle projectors for my C63. Every time I open the door at a meet, someone films it. Arrived in 2 days from Vancouver."</p>
+      <div class="rv-name">Jake R.</div><div class="rv-meta">Richmond · Mercedes C63</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY -->
+<div class="why-wrap">
+  <div>
+    <div class="sec-eyebrow">Our standard</div>
+    <div class="sec-title">Built for enthusiasts.</div>
+    <p class="sec-body">We're not a dropshipping store. Every product is vetted and chosen by people who actually care about cars.</p>
+    <div class="w-list">
+      <div class="wi reveal"><div class="win">01</div><div><div class="wit">Factory-direct sourcing</div><div class="wid">Straight from trusted manufacturers in Shenzhen. No middlemen. Prices stay low, quality stays high.</div></div></div>
+      <div class="wi reveal"><div class="win">02</div><div><div class="wit">Vancouver-local delivery</div><div class="wid">We're based here. Most orders arrive in 2–3 days. We handle all importing — no customs surprises.</div></div></div>
+      <div class="wi reveal"><div class="win">03</div><div><div class="wit">30-day returns</div><div class="wid">Doesn't fit? Send it back within 30 days — full refund, no questions asked.</div></div></div>
+      <div class="wi reveal"><div class="win">04</div><div><div class="wit">Vetted by real drivers</div><div class="wid">If we wouldn't put it in our own build, we don't sell it. Simple as that.</div></div></div>
+    </div>
+  </div>
+  <div class="why-stats">
+    <div class="bstat">
+      <div class="bnum">500+</div>
+      <div class="bcap">Products curated for Canadian drivers — growing every month.</div>
+      <div class="route"><div class="rdot"></div><span class="rcity">Shenzhen, CN</span><div class="rline"></div><div class="rdot"></div><span class="rcity" style="color:var(--black);font-weight:500;">Vancouver, BC</span></div>
+    </div>
+    <div class="bstat"><div class="bnum">4.9★</div><div class="bcap">Average rating across all orders. Every review is from a real customer.</div></div>
+    <div class="bstat"><div class="bnum">48h</div><div class="bcap">Average delivery time in Metro Vancouver for in-stock items.</div></div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="nl-wrap" id="nl">
+  <div>
+    <div class="sec-eyebrow">Stay ahead</div>
+    <div class="sec-title" style="color:var(--white);">First to know.</div>
+    <p class="sec-body" style="color:rgba(255,255,255,.55);">New drops, Vancouver-only deals, and pre-order access straight to your inbox. No spam, ever.</p>
+  </div>
+  <div>
+    <div class="nl-form">
+      <input type="email" class="nl-in" placeholder="your@email.com" id="nle">
+      <button class="nl-btn" id="nlb">Join</button>
+    </div>
+    <p class="nl-note">Free shipping on your first order when you sign up.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-top">
+    <div>
+      <a href="#" class="f-logo">Carazin</a>
+      <p class="f-tagline">Premium car accessories for drivers who care about every detail. Sourced globally, shipped locally across Vancouver.</p>
+    </div>
+    <div>
+      <div class="f-col-t">Shop</div>
+      <ul class="f-links">
+        <li><a href="#">Ambient Lighting</a></li>
+        <li><a href="#">Radar Detectors</a></li>
+        <li><a href="#">M4 CS Taillights</a></li>
+        <li><a href="#">Door Projectors</a></li>
+        <li><a href="#">Display Keys</a></li>
+        <li><a href="#">Wireless CarPlay</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-t">Info</div>
+      <ul class="f-links">
+        <li><a href="#">About Carazin</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Install Guides</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-t">Contact</div>
+      <ul class="f-links">
+        <li><a href="#">hello@carazin.ca</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">Vancouver, BC 🇨🇦</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="f-bot">
+    <div class="f-copy">© 2025 Carazin Inc. — All rights reserved</div>
+    <div class="f-soc">
+      <a href="#" class="sb">IG</a>
+      <a href="#" class="sb">TT</a>
+      <a href="#" class="sb">FB</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── BMW CURSOR ──────────────────────────────────────
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0,isDark=false;
+
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+
+(function loop(){
+  rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+
+// Cursor invert on dark sections
+const darkEls = document.querySelectorAll('.feat-cnt,.keys-section,.nl-wrap,footer,.mbar,.hero,.zoom-section');
+function updateCursorColor(){
+  let onDark = false;
+  darkEls.forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(my > r.top && my < r.bottom && mx > r.left && mx < r.right) onDark = true;
+  });
+  if(onDark !== isDark){
+    isDark = onDark;
+    // Swap BMW logo quadrant fills
+    const fills = cur.querySelectorAll('path');
+    fills.forEach((p,i) => {
+      if(onDark){
+        if(p.getAttribute('fill')==='#0a0a0a') p.setAttribute('fill','#f5f4f0');
+        else if(p.getAttribute('fill')==='white'||p.getAttribute('fill')==='#f5f4f0') p.setAttribute('fill','#0a0a0a');
+      } else {
+        if(p.getAttribute('fill')==='#f5f4f0') p.setAttribute('fill','#0a0a0a');
+        else if(p.getAttribute('fill')==='#0a0a0a'&&i>=2) p.setAttribute('fill','white');
+      }
+    });
+    cur.querySelectorAll('circle').forEach(c => c.setAttribute('stroke', onDark ? '#f5f4f0':'#0a0a0a'));
+    ring.style.borderColor = onDark ? 'rgba(245,244,240,0.22)' : 'rgba(10,10,10,0.18)';
+  }
+}
+document.addEventListener('mousemove', updateCursorColor);
+
+// Cursor scale on hover
+document.querySelectorAll('a,button,.p-card,.k-card,.feat-item,.wi').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cur.style.transform='translate(-50%,-50%) scale(1.5)';
+    ring.style.width='70px'; ring.style.height='70px'; ring.style.opacity='.4';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cur.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.width='50px'; ring.style.height='50px'; ring.style.opacity='1';
+  });
+});
+
+// ── NAV LIGHT/DARK ─────────────────────────────────
+const nav = document.getElementById('nav');
+const lightSections = document.querySelectorAll('.products-wrap,.panel-split,.puddle-split,.cp-split,.rev-section,.why-wrap');
+function updateNav(){
+  let onLight = false;
+  lightSections.forEach(el => {
+    const r = el.getBoundingClientRect();
+    if(r.top <= 80 && r.bottom >= 80) onLight = true;
+  });
+  nav.classList.toggle('light', onLight);
+}
+window.addEventListener('scroll', updateNav);
+
+// ── GSAP ────────────────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance
+const htl = gsap.timeline({defaults:{ease:'power3.out'}});
+htl.to('#htag',{opacity:1,y:0,duration:.8,delay:.3})
+   .to('#hh1', {opacity:1,y:0,duration:1.0},'-=.5')
+   .to('#hsub',{opacity:1,y:0,duration:.8},'-=.6')
+   .to('#hcta',{opacity:1,y:0,duration:.7},'-=.5')
+   .to('#sc',  {opacity:1,duration:.5},'-=.3');
+
+// Hero parallax
+gsap.to('#hero-img',{yPercent:15,ease:'none',
+  scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}
+});
+
+// ── SCROLLYTELLING: ZOOM INTO CAR → INTERIOR ──────
+// Pin for 500vh. Progress 0→1:
+// 0→0.35: exterior zooms in slowly (scale 1→1.8), brightness drops
+// 0.35→0.5: crossfade exterior out, interior fades in
+// 0.5→0.75: interior is full screen, zooms in gently (scale 1→1.15)
+// 0.75→1: interior zooms out to normal, exits
+
+const zoomTl = gsap.timeline({
+  scrollTrigger:{
+    trigger:'#story',
+    start:'top top',
+    end:'bottom bottom',
+    scrub:1.8,
+  }
+});
+
+zoomTl
+  // Exterior zooms in
+  .to('#zoom-car',{scale:2.2, filter:'brightness(0.3) contrast(1.1)', ease:'power1.inOut', duration:.45}, 0)
+  // Exterior fades out
+  .to('#zoom-ext',{opacity:0, duration:.12, ease:'power1.in'}, .38)
+  // Interior fades in
+  .to('#zoom-int',{opacity:1, duration:.14, ease:'power1.out'}, .42)
+  // Interior gentle zoom
+  .fromTo('#zoom-interior',
+    {scale:1.2, filter:'brightness(0.5) contrast(1.05)'},
+    {scale:1.0, filter:'brightness(0.85) contrast(1.05)', duration:.4, ease:'power1.out'},
+    .42
+  )
+  // Interior zooms in a bit more then lingers
+  .to('#zoom-interior',{scale:1.08, duration:.35, ease:'power1.inOut'}, .72);
+
+// ── REVEALS ─────────────────────────────────────────
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.fromTo(el,{opacity:0,y:22},{
+    opacity:1,y:0,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}
+  });
+});
+
+// ── TAILLIGHT PARALLAX ───────────────────────────────
+gsap.to('.feat-img img',{yPercent:10,ease:'none',
+  scrollTrigger:{trigger:'.feature-split',start:'top bottom',end:'bottom top',scrub:true}
+});
+
+// ── ADD TO CART ──────────────────────────────────────
+document.querySelectorAll('.add-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    this.textContent='✓';
+    this.style.background='var(--black)'; this.style.color='var(--white)'; this.style.borderColor='var(--black)';
+    setTimeout(()=>{this.textContent='+';this.style.background='';this.style.color='';this.style.borderColor='';},1800);
+  });
+});
+
+// ── NEWSLETTER ───────────────────────────────────────
+document.getElementById('nlb').addEventListener('click',function(){
+  const inp=document.getElementById('nle');
+  if(inp.value.includes('@')){
+    this.textContent='✓'; this.style.background='#2d5a2d'; this.style.color='#f5f4f0';
+    inp.value='';
+    setTimeout(()=>{this.textContent='Join';this.style.background='';this.style.color='';},3000);
+  }
+});
+</script>
+</body>
+</html>
