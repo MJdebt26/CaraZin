@@ -1,0 +1,21 @@
+{
+  "name": "carazin",
+  "version": "1.0.0",
+  "description": "CaraZin — premium automotive accessories web store (Express + node:sqlite + Stripe)",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build:storefront": "node scripts/build-storefront.js",
+    "seed": "node server/lib/db.js --seed"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "stripe": "^17.5.0"
+  }
+}
