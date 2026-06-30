@@ -1,16 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { initStorefront } from '@/lib/storefront-init';
+import { useAuth } from './AuthProvider';
+import AuthModal from './AuthModal';
 
-// Phase 0: run the ported storefront behaviour (cursor, nav, GSAP, reveals) and
-// give the add-to-cart / newsletter buttons their original visual feedback.
-// Real cart, auth, and checkout are layered on in later phases.
 export default function StoreClient() {
+  const { user } = useAuth();
+  const [authOpen, setAuthOpen] = useState(false);
+
+  // Run the ported storefront behaviour once on mount.
   useEffect(() => {
     initStorefront();
 
-    // Temporary "+ → ✓" feedback on add buttons (cart wiring comes in Phase 2)
+    // Temporary "+ → ✓" feedback on add buttons (real cart comes in Phase 2)
     const addBtns = Array.from(document.querySelectorAll<HTMLElement>('.add-btn'));
     const addHandlers = addBtns.map((btn) => {
       const handler = () => {
@@ -25,7 +28,6 @@ export default function StoreClient() {
       return { btn, handler };
     });
 
-    // Newsletter visual feedback
     const nlb = document.getElementById('nlb');
     const nle = document.getElementById('nle') as HTMLInputElement | null;
     const nlHandler = () => {
@@ -44,5 +46,20 @@ export default function StoreClient() {
     };
   }, []);
 
-  return null;
+  // Wire the nav Sign In / Account button (lives in injected static markup).
+  useEffect(() => {
+    const btn = document.querySelector<HTMLElement>('[data-auth-toggle]');
+    if (!btn) return;
+    const open = () => setAuthOpen(true);
+    btn.addEventListener('click', open);
+    return () => btn.removeEventListener('click', open);
+  }, []);
+
+  // Reflect auth state in the nav button label.
+  useEffect(() => {
+    const btn = document.querySelector<HTMLElement>('[data-auth-toggle]');
+    if (btn) btn.textContent = user ? 'Account' : 'Sign In';
+  }, [user]);
+
+  return <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />;
 }
