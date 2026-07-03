@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import type { Session, SupabaseClient, User } from '@supabase/supabase-js';
+import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 
 type AuthResult = { error: string | null; needsConfirmation?: boolean };
@@ -28,8 +28,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       return;
     }
-    supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
-      setUser(data.session?.user ?? null);
+    // getUser() validates the session against the server (getSession() would
+    // trust a possibly-stale local cookie).
+    supabase.auth.getUser().then(({ data }: { data: { user: User | null } }) => {
+      setUser(data.user ?? null);
       setLoading(false);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {

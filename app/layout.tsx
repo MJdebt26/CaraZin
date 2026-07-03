@@ -3,6 +3,8 @@ import Script from 'next/script';
 import './globals.css';
 import './store.css';
 import { AuthProvider } from '@/components/AuthProvider';
+import { CartProvider } from '@/components/CartProvider';
+import CartDrawer from '@/components/CartDrawer';
 
 export const metadata: Metadata = {
   title: 'CARAZIN',
@@ -22,7 +24,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" strategy="beforeInteractive" />
       </head>
       <body suppressHydrationWarning>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <CartProvider>
+            {children}
+            <CartDrawer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
