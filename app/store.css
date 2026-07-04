@@ -20,45 +20,40 @@
    brand gold used across the site (prices, eyebrows, hovers). */
 .logo-zin { color: var(--gold); }
 
-/* ── Cinematic scroll sequence (#cine) ──
-   Desktop: sticky-pinned viewport, layers crossfade via a GSAP scrub timeline.
-   Mobile: no pin/scrub — layers become a vertical stack that fades in on scroll. */
-.cine-section { position: relative; background: var(--black); }
-.cine-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
-.cine-layer {
+/* ── "Details Matter" scroll sequence (built on the hero, #dm-stage) ──
+   The real hero headline (#hh1) scales up + centres, then crossfades through
+   Inside → interior shot → And Out → exterior shot.
+   Desktop: the stage is pinned (GSAP pin) and the timeline scrubs.
+   Mobile: no pin/scrub — the beats become a vertical stack that fades in. */
+.dm-stage { position: relative; }
+.hero-seq {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
   opacity: 0; will-change: opacity, transform;
 }
-.cine-layer.is-img img {
+.hero-seq.hs-img img {
   width: 100%; height: 100%; object-fit: cover;
   filter: brightness(.72) contrast(1.06);
 }
-.cine-txt { background: var(--black); }
-.cine-txt-light { background: var(--off); }
-.cine-h {
+.hs-inside { background: var(--black); }
+.hs-andout { background: var(--off); }
+.hs-h {
   font-family: 'Inter', sans-serif; font-weight: 300;
   letter-spacing: -.02em; line-height: 1; text-align: center;
   font-size: clamp(2.6rem, 9vw, 8rem); padding: 0 6vw;
 }
-.cine-details .cine-h { color: var(--white); }
-.cine-inside-t .cine-h { color: var(--gold); }
-.cine-andout .ao-and { color: var(--black); } /* "And" black … */
-.cine-andout .ao-out { color: var(--gold); }  /* … "Out" gold (on off-white) */
-/* Stacking so each later beat crossfades over the previous one. */
-.cine-details  { z-index: 1; }
-.cine-inside-t { z-index: 2; }
-.cine-inside   { z-index: 3; }
-.cine-andout   { z-index: 4; }
-.cine-outside  { z-index: 5; }
+.hs-inside .hs-h { color: var(--gold); }
+.hs-andout .ao-and { color: var(--black); } /* "And" black … */
+.hs-andout .ao-out { color: var(--gold); }  /* … "Out" gold (on off-white) */
+/* Stacking: each later beat crossfades above the previous (and above the hero). */
+.hs-inside   { z-index: 3; }
+.hs-interior { z-index: 4; }
+.hs-andout   { z-index: 5; }
+.hs-exterior { z-index: 6; }
 
-@media (min-width: 768px) {
-  .cine-section { height: 700vh; } /* scroll distance the pinned timeline scrubs over */
-}
 @media (max-width: 767px) {
-  .cine-section { height: auto; }
-  .cine-sticky { position: static; height: auto; }
-  .cine-layer { position: relative; inset: auto; min-height: 86vh; }
+  /* fallback: beats flow vertically below the (un-pinned) hero */
+  .hero-seq { position: relative; inset: auto; min-height: 86vh; }
 }
 
 /* Nav auth button (sits beside the existing .nav-shop cart button) */
