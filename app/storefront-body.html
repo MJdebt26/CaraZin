@@ -1,20 +1,20 @@
 <!-- BMW CURSOR -->
 <div id="cur">
   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="16" cy="16" r="15" stroke="#0a0a0a" stroke-width="1.2" fill="none"/>
-    <circle cx="16" cy="16" r="11.5" stroke="#0a0a0a" stroke-width=".7" fill="none"/>
-    <path d="M16 4.5 A11.5 11.5 0 0 1 27.5 16 L16 16 Z" fill="#0a0a0a"/>
-    <path d="M16 27.5 A11.5 11.5 0 0 1 4.5 16 L16 16 Z" fill="#0a0a0a"/>
-    <path d="M4.5 16 A11.5 11.5 0 0 1 16 4.5 L16 16 Z" fill="white"/>
-    <path d="M27.5 16 A11.5 11.5 0 0 1 16 27.5 L16 16 Z" fill="white"/>
-    <circle cx="16" cy="16" r="15" stroke="#0a0a0a" stroke-width="1.2" fill="none"/>
+    <circle class="cur-stroke" cx="16" cy="16" r="15" stroke="#0a0a0a" stroke-width="1.2" fill="none"/>
+    <circle class="cur-stroke" cx="16" cy="16" r="11.5" stroke="#0a0a0a" stroke-width=".7" fill="none"/>
+    <path class="cur-gold" d="M16 4.5 A11.5 11.5 0 0 1 27.5 16 L16 16 Z" fill="#b8944a"/>
+    <path class="cur-gold" d="M16 27.5 A11.5 11.5 0 0 1 4.5 16 L16 16 Z" fill="#b8944a"/>
+    <path class="cur-swap" d="M4.5 16 A11.5 11.5 0 0 1 16 4.5 L16 16 Z" fill="#0a0a0a"/>
+    <path class="cur-swap" d="M27.5 16 A11.5 11.5 0 0 1 16 27.5 L16 16 Z" fill="#0a0a0a"/>
+    <circle class="cur-stroke" cx="16" cy="16" r="15" stroke="#0a0a0a" stroke-width="1.2" fill="none"/>
   </svg>
 </div>
 <div id="cur-ring"></div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-logo">Carazin</a>
+  <a href="#" class="nav-logo">Cara<span class="logo-zin">zin</span></a>
   <ul class="nav-links">
     <li><a href="#products">Shop</a></li>
     <li><a href="#taillights">Lighting</a></li>
@@ -80,6 +80,17 @@
     </div>
   </div>
 </div>
+
+<!-- CINEMATIC SEQUENCE -->
+<section class="cine-section" id="cine">
+  <div class="cine-sticky">
+    <div class="cine-layer cine-txt cine-details"><h2 class="cine-h">Details Matter</h2></div>
+    <div class="cine-layer cine-txt cine-inside-t"><h2 class="cine-h">Inside</h2></div>
+    <div class="cine-layer is-img cine-inside"><img src="/cine-inside.jpg" alt="BMW ambient-lit interior at dusk"></div>
+    <div class="cine-layer cine-txt-light cine-andout"><h2 class="cine-h"><span class="ao-and">And</span> <span class="ao-out">Out</span></h2></div>
+    <div class="cine-layer is-img cine-outside"><img src="/cine-outside.webp" alt="M4 CS style sequential taillights"></div>
+  </div>
+</section>
 
 <!-- PRODUCTS -->
 <div class="products-wrap" id="products">
@@ -357,7 +368,7 @@
 <footer>
   <div class="f-top">
     <div>
-      <a href="#" class="f-logo">Carazin</a>
+      <a href="#" class="f-logo">Cara<span class="logo-zin">zin</span></a>
       <p class="f-tagline">Premium car accessories for drivers who care about every detail. Sourced globally, shipped locally across Vancouver.</p>
     </div>
     <div>
