@@ -146,34 +146,6 @@ nav.light .nav-shop:hover { color: var(--black); border-color: var(--dark); }
 .msep { color: rgba(184,148,74,.5); font-size: .4rem; vertical-align: middle; }
 @keyframes mq { from{transform:translateX(0);} to{transform:translateX(-50%);} }
 
-/* ── SCROLLYTELLING: CAR ZOOM ── */
-.zoom-section { min-height: 500vh; position: relative; background: var(--black); }
-.zoom-sticky {
-  position: sticky; top: 0; height: 100vh;
-  overflow: hidden; display: flex; align-items: center; justify-content: center;
-}
-.zoom-img {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-.zoom-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  object-position: center 30%;
-  filter: brightness(.6) contrast(1.08);
-  transform-origin: center 35%;
-}
-/* Interior image - hidden initially */
-.interior-img {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0;
-}
-.interior-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: brightness(.7) contrast(1.05);
-  transform-origin: center center;
-}
-
 /* ── STRIP DIVIDER ── */
 .strip { height: 1px; background: var(--light); }
 .strip-dark { height: 1px; background: rgba(255,255,255,.08); }
