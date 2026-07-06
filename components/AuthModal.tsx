@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from './AuthProvider';
 
-export default function AuthModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { user, configured, signIn, signUp, signOut } = useAuth();
+export default function AuthModal() {
+  const { user, configured, signIn, signUp, signOut, authModalOpen: open, closeAuth: onClose } = useAuth();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

@@ -1,15 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { initStorefront } from '@/lib/storefront-init';
 import { useAuth } from './AuthProvider';
 import { useCart } from './CartProvider';
-import AuthModal from './AuthModal';
 
 export default function StoreClient() {
-  const { user } = useAuth();
+  const { user, openAuth } = useAuth();
   const { add, count, setOpen } = useCart();
-  const [authOpen, setAuthOpen] = useState(false);
+  const router = useRouter();
+
+  // Mark the landing page so global `cursor:none` (for the custom BMW cursor)
+  // applies only here — the standalone shop/account pages use a normal cursor.
+  useEffect(() => {
+    document.body.classList.add('landing');
+    return () => document.body.classList.remove('landing');
+  }, []);
 
   // Run the ported storefront behaviour once, plus newsletter feedback.
   useEffect(() => {
@@ -57,14 +64,33 @@ export default function StoreClient() {
     const cartBtn = document.querySelector<HTMLElement>('[data-cart-toggle]');
     const authBtn = document.querySelector<HTMLElement>('[data-auth-toggle]');
     const openCart = () => setOpen(true);
-    const openAuth = () => setAuthOpen(true);
+    const doAuth = () => openAuth();
     cartBtn?.addEventListener('click', openCart);
-    authBtn?.addEventListener('click', openAuth);
+    authBtn?.addEventListener('click', doAuth);
     return () => {
       cartBtn?.removeEventListener('click', openCart);
-      authBtn?.removeEventListener('click', openAuth);
+      authBtn?.removeEventListener('click', doAuth);
     };
-  }, [setOpen]);
+  }, [setOpen, openAuth]);
+
+  // Make each landing product/key card clickable → its detail page. The slug
+  // comes from the card's [data-add] element; clicks on the add button itself
+  // still add to cart (handled above), so we ignore those.
+  useEffect(() => {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.p-card, .k-card'));
+    const handlers = cards.map((card) => {
+      const slug = card.querySelector<HTMLElement>('[data-add]')?.dataset.add;
+      const handler = (e: Event) => {
+        if (!slug) return;
+        if ((e.target as HTMLElement).closest('[data-add]')) return; // add-to-cart button
+        router.push(`/shop/${slug}`);
+      };
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', handler);
+      return { card, handler };
+    });
+    return () => handlers.forEach(({ card, handler }) => card.removeEventListener('click', handler));
+  }, [router]);
 
   // Reflect cart count in the nav badge.
   useEffect(() => {
@@ -78,5 +104,5 @@ export default function StoreClient() {
     if (btn) btn.textContent = user ? 'Account' : 'Sign In';
   }, [user]);
 
-  return <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />;
+  return null;
 }

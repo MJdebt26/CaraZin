@@ -5,6 +5,7 @@ import './store.css';
 import { AuthProvider } from '@/components/AuthProvider';
 import { CartProvider } from '@/components/CartProvider';
 import CartDrawer from '@/components/CartDrawer';
+import AuthModal from '@/components/AuthModal';
 
 export const metadata: Metadata = {
   title: 'CARAZIN',
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CartProvider>
             {children}
             <CartDrawer />
+            <AuthModal />
           </CartProvider>
         </AuthProvider>
       </body>

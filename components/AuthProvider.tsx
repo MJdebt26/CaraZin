@@ -11,6 +11,9 @@ type AuthContextValue = {
   loading: boolean;
   configured: boolean;
   supabase: SupabaseClient | null;
+  authModalOpen: boolean;
+  openAuth: () => void;
+  closeAuth: () => void;
   signIn: (email: string, password: string) => Promise<AuthResult>;
   signUp: (email: string, password: string) => Promise<AuthResult>;
   signOut: () => Promise<void>;
@@ -22,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = useMemo(() => createClient(), []);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   useEffect(() => {
     if (!supabase) {
@@ -45,6 +49,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     configured: !!supabase,
     supabase,
+    authModalOpen,
+    openAuth: () => setAuthModalOpen(true),
+    closeAuth: () => setAuthModalOpen(false),
     async signIn(email, password) {
       if (!supabase) return { error: 'Accounts are not configured yet.' };
       const { error } = await supabase.auth.signInWithPassword({ email, password });

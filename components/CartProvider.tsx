@@ -16,7 +16,7 @@ type CartContextValue = {
   count: number;
   open: boolean;
   setOpen: (v: boolean) => void;
-  add: (slug: string) => Promise<void>;
+  add: (slug: string, qty?: number) => Promise<void>;
   setQty: (productId: string, qty: number) => Promise<void>;
   remove: (productId: string) => Promise<void>;
   toast: (msg: string, err?: boolean) => void;
@@ -111,13 +111,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [user, productsBySlug, guestLines]);
 
   // ── Mutations ──
-  const add = useCallback(async (slug: string) => {
+  const add = useCallback(async (slug: string, qty = 1) => {
     const product = productsBySlug[slug];
     if (user) {
       try {
         const res = await fetch('/api/cart', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug }),
+          body: JSON.stringify({ slug, qty }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
@@ -126,7 +126,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } else {
       const map = readGuest();
       const stock = product?.stock ?? 99;
-      map[slug] = clampQty((map[slug] || 0) + 1, stock);
+      map[slug] = clampQty((map[slug] || 0) + qty, stock);
       writeGuest(map);
       setItems(guestLines(map));
     }
