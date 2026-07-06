@@ -392,3 +392,99 @@ body:not(.landing) .cz-input { cursor: text; }
   .ship-head { display: none; }
   .f-pay-secure { margin-left: 0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Star ratings (layered clip — precise fractional fill)
+   ═══════════════════════════════════════════════════════════════ */
+.stars { position: relative; display: inline-block; line-height: 1; white-space: nowrap; letter-spacing: .08em; vertical-align: middle; }
+.stars-bg { color: var(--light); }
+.stars-fg { position: absolute; top: 0; left: 0; overflow: hidden; color: var(--gold); white-space: nowrap; }
+
+/* Shop card rating row */
+.shop-card-rating { display: flex; align-items: center; gap: .5rem; margin-top: .55rem; }
+.shop-card-rating .rc-count { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .08em; color: var(--mid); }
+
+/* PDP rating row (under the title) */
+.pdp-rating { display: flex; align-items: center; gap: .7rem; margin: .9rem 0 .2rem; }
+.pdp-rating .rc-val { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--black); font-weight: 500; }
+.pdp-rating .rc-link { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); text-decoration: none; border-bottom: 1px solid transparent; }
+.pdp-rating .rc-link:hover { color: var(--gold); border-bottom-color: rgba(184,148,74,.4); }
+
+/* ── PDP reviews section ── */
+.pdp-reviews { margin-top: 5rem; border-top: 1px solid var(--light); padding-top: 3rem; }
+.pdp-reviews-head { display: grid; grid-template-columns: 260px 1fr; gap: 3rem; align-items: start; margin-bottom: 2.8rem; }
+.rev-summary-score { font-size: 3.2rem; font-weight: 300; letter-spacing: -.03em; line-height: 1; }
+.rev-summary-out { color: var(--mid); font-size: 1.2rem; }
+.rev-summary .stars { margin: .7rem 0 .5rem; }
+.rev-summary-count { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
+.rev-dist { display: flex; flex-direction: column; gap: .5rem; padding-top: .3rem; }
+.rev-dist-row { display: flex; align-items: center; gap: .8rem; }
+.rev-dist-label { font-family: 'DM Mono', monospace; font-size: .58rem; color: var(--mid); width: 2.2rem; flex-shrink: 0; }
+.rev-dist-track { flex: 1; height: 5px; background: var(--light); border-radius: 3px; overflow: hidden; }
+.rev-dist-fill { height: 100%; background: var(--gold); border-radius: 3px; }
+.rev-dist-pct { font-family: 'DM Mono', monospace; font-size: .56rem; color: var(--mid); width: 2.4rem; text-align: right; flex-shrink: 0; }
+
+.rev-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--light); border: 1px solid var(--light); }
+.rev-card { background: var(--white); padding: 1.8rem 1.9rem; }
+.rev-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: .9rem; }
+.rev-card-title { font-size: .95rem; font-weight: 500; margin: .3rem 0 .6rem; }
+.rev-card-body { font-size: .85rem; line-height: 1.75; color: var(--dark); }
+.rev-card-foot { display: flex; align-items: center; gap: .6rem; margin-top: 1.2rem; flex-wrap: wrap; }
+.rev-card-author { font-size: .8rem; font-weight: 500; color: var(--black); }
+.rev-card-meta { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); }
+.rev-verified { font-family: 'DM Mono', monospace; font-size: .5rem; letter-spacing: .08em; text-transform: uppercase; color: #1f6b3a; border: 1px solid rgba(31,107,58,.28); padding: .18rem .5rem; border-radius: 2px; }
+
+@media (max-width: 760px) {
+  .pdp-reviews-head { grid-template-columns: 1fr; gap: 1.6rem; }
+  .rev-cards { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PDP depth — breadcrumbs, highlights, trust row, specs accordion
+   ═══════════════════════════════════════════════════════════════ */
+/* NB: reset position/justify — a bare <nav> would inherit the landing's global
+   fixed full-width nav. */
+.pdp-crumbs { position: static; justify-content: flex-start; display: flex; align-items: center; gap: .6rem;
+  font-family: 'DM Mono', monospace; padding: 0;
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--mid); margin-bottom: 1.6rem; }
+.pdp-crumbs a { color: var(--mid); text-decoration: none; transition: color .2s; }
+.pdp-crumbs a:hover { color: var(--gold); }
+.pdp-crumb-current { color: var(--black); }
+
+.pdp-cur { font-family: 'DM Mono', monospace; font-size: .72rem; font-weight: 400; color: var(--mid); letter-spacing: .08em; }
+
+.pdp-highlights { list-style: none; display: flex; flex-direction: column; gap: .7rem; margin: .4rem 0 .4rem; }
+.pdp-highlights li { font-size: .86rem; line-height: 1.5; color: var(--dark); padding-left: 1.6rem; position: relative; }
+.pdp-highlights li::before {
+  content: ''; position: absolute; left: 0; top: .34em; width: 9px; height: 5px;
+  border-left: 1.5px solid var(--gold); border-bottom: 1.5px solid var(--gold); transform: rotate(-45deg);
+}
+
+/* Trust row under Add-to-Cart */
+.trust-row { display: flex; flex-wrap: wrap; gap: 1.4rem 1.6rem; margin: 1.4rem 0 .4rem;
+  padding: 1.1rem 0; border-top: 1px solid var(--light); border-bottom: 1px solid var(--light); }
+.trust-item { display: flex; align-items: center; gap: .55rem; font-family: 'DM Mono', monospace;
+  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dark); }
+.trust-item svg { color: var(--gold); flex-shrink: 0; }
+
+/* Specs / shipping accordion */
+.pdp-acc { margin-top: 1.8rem; }
+.pdp-acc details { border-top: 1px solid var(--light); }
+.pdp-acc details:last-child { border-bottom: 1px solid var(--light); }
+.pdp-acc summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 1.15rem 0; font-size: .82rem; font-weight: 500; color: var(--black);
+  font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+.pdp-acc summary::-webkit-details-marker { display: none; }
+.pdp-acc details[open] .faq-icon::after { transform: scaleY(0); opacity: 0; }
+.pdp-acc-body { padding: 0 0 1.4rem; }
+.pdp-acc-body p { font-size: .85rem; line-height: 1.8; color: var(--mid); margin-bottom: .8rem; }
+.pdp-acc-body a { color: var(--gold); text-decoration: none; }
+.pdp-specs { display: flex; flex-direction: column; }
+.pdp-spec { display: grid; grid-template-columns: 130px 1fr; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--light); }
+.pdp-spec:last-child { border-bottom: none; }
+.pdp-spec dt { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
+.pdp-spec dd { font-size: .85rem; color: var(--dark); line-height: 1.5; }
+
+@media (max-width: 480px) {
+  .pdp-spec { grid-template-columns: 1fr; gap: .2rem; }
+}

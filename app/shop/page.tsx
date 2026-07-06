@@ -2,7 +2,9 @@ import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import AnnouncementBar from '@/components/AnnouncementBar';
+import Stars from '@/components/Stars';
 import { getProducts } from '@/lib/products-server';
+import { getRating } from '@/lib/reviews';
 
 export const metadata = { title: 'Shop · CARAZIN' };
 
@@ -24,20 +26,27 @@ export default async function ShopPage() {
           <p className="shop-empty">No products available. (Is Supabase configured?)</p>
         ) : (
           <div className="shop-grid">
-            {products.map((p) => (
-              <Link key={p.id} href={`/shop/${p.slug}`} className="shop-card">
-                <div className="shop-card-img">
-                  {p.image ? <img src={p.image} alt={p.name} /> : <div className="shop-card-noimg" />}
-                  {p.badge && <span className="shop-card-badge">{p.badge}</span>}
-                  {!p.inStock && <span className="shop-card-sold">Sold out</span>}
-                </div>
-                <div className="shop-card-body">
-                  <div className="shop-card-name">{p.name}</div>
-                  {p.fitment && <div className="shop-card-fit">{p.fitment}</div>}
-                  <div className="shop-card-price">${p.price.toFixed(2)}</div>
-                </div>
-              </Link>
-            ))}
+            {products.map((p) => {
+              const r = getRating(p.slug);
+              return (
+                <Link key={p.id} href={`/shop/${p.slug}`} className="shop-card">
+                  <div className="shop-card-img">
+                    {p.image ? <img src={p.image} alt={p.name} /> : <div className="shop-card-noimg" />}
+                    {p.badge && <span className="shop-card-badge">{p.badge}</span>}
+                    {!p.inStock && <span className="shop-card-sold">Sold out</span>}
+                  </div>
+                  <div className="shop-card-body">
+                    <div className="shop-card-name">{p.name}</div>
+                    {p.fitment && <div className="shop-card-fit">{p.fitment}</div>}
+                    <div className="shop-card-rating">
+                      <Stars value={r.value} size={11} />
+                      <span className="rc-count">{r.value.toFixed(1)} ({r.count})</span>
+                    </div>
+                    <div className="shop-card-price">${p.price.toFixed(2)}</div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </main>
