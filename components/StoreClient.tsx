@@ -85,7 +85,8 @@ export default function StoreClient() {
         if ((e.target as HTMLElement).closest('[data-add]')) return; // add-to-cart button
         router.push(`/shop/${slug}`);
       };
-      card.style.cursor = 'pointer';
+      // NB: don't set cursor:pointer here — the landing keeps its custom BMW
+      // cursor (which already scales on hover); an inline pointer would override it.
       card.addEventListener('click', handler);
       return { card, handler };
     });
