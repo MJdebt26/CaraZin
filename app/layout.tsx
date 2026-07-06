@@ -7,9 +7,37 @@ import { CartProvider } from '@/components/CartProvider';
 import CartDrawer from '@/components/CartDrawer';
 import AuthModal from '@/components/AuthModal';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carazin.ca';
+
 export const metadata: Metadata = {
-  title: 'CARAZIN',
-  description: 'Vancouver · Premium Automotive Accessories',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'CARAZIN — Premium Automotive Accessories · Vancouver',
+    template: '%s',
+  },
+  description:
+    'OEM-grade lighting, display keys, wireless CarPlay, and exterior upgrades for BMW and Mercedes drivers. Shipped locally from Vancouver, BC — free over $150.',
+  keywords: [
+    'car accessories Vancouver', 'BMW ambient lighting', 'Mercedes display key',
+    'wireless CarPlay', 'M4 CS taillights', 'OEM car upgrades', 'CaraZin',
+  ],
+  applicationName: 'CARAZIN',
+  authors: [{ name: 'Carazin' }],
+  openGraph: {
+    type: 'website',
+    siteName: 'CARAZIN',
+    title: 'CARAZIN — Premium Automotive Accessories',
+    description:
+      'OEM-grade lighting, keys, and exterior for drivers who notice everything. Shipped from Vancouver, BC.',
+    url: SITE_URL,
+    locale: 'en_CA',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CARAZIN — Premium Automotive Accessories',
+    description: 'OEM-grade car accessories, shipped from Vancouver, BC.',
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
