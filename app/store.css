@@ -529,3 +529,68 @@ body:not(.landing) .cz-input { cursor: text; }
   .shop-toolbar { flex-direction: column; align-items: stretch; }
   .shop-sort { justify-content: space-between; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Checkout badge + order confirmation (/success) + account
+   ═══════════════════════════════════════════════════════════════ */
+.cz-secure { text-align: center; font-family: 'DM Mono', monospace; font-size: .52rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--mid); margin-top: .8rem; }
+
+.success-main { max-width: 620px; margin: 0 auto; padding: 5rem 4vw 6rem; text-align: center; }
+.success-mark { width: 76px; height: 76px; margin: 0 auto 1.8rem; border-radius: 50%;
+  background: rgba(31,107,58,.1); color: #1f6b3a; display: flex; align-items: center; justify-content: center; }
+.success-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 300; letter-spacing: -.02em; line-height: 1.1; margin: .6rem 0 1rem; }
+.success-lead { font-size: .95rem; line-height: 1.75; color: var(--dark); max-width: 46ch; margin: 0 auto; }
+.success-lead strong { color: var(--black); font-weight: 500; }
+
+.success-card { text-align: left; border: 1px solid var(--light); background: var(--white); margin: 2.6rem 0; }
+.success-card-head { display: flex; align-items: center; justify-content: space-between;
+  padding: 1.3rem 1.6rem; border-bottom: 1px solid var(--light); }
+.success-ref-label, .success-ref { font-family: 'DM Mono', monospace; }
+.success-ref-label { font-size: .52rem; letter-spacing: .16em; text-transform: uppercase; color: var(--mid); }
+.success-ref { font-size: .95rem; color: var(--black); margin-top: .2rem; }
+.success-status { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase;
+  padding: .35rem .7rem; border-radius: 2px; }
+.success-status.paid { color: #1f6b3a; border: 1px solid rgba(31,107,58,.3); }
+.success-status.pending { color: var(--gold); border: 1px solid rgba(184,148,74,.35); }
+.success-items { padding: .6rem 1.6rem; }
+.success-item { display: flex; justify-content: space-between; padding: .7rem 0; border-bottom: 1px solid var(--light); font-size: .85rem; }
+.success-item:last-child { border-bottom: none; }
+.success-item-qty, .order-item-qty { color: var(--mid); font-family: 'DM Mono', monospace; font-size: .7rem; }
+.success-totals { padding: 1.1rem 1.6rem 1.4rem; background: var(--off); border-top: 1px solid var(--light); }
+.success-row { display: flex; justify-content: space-between; font-size: .82rem; color: var(--dark); margin-bottom: .5rem; }
+.success-row.total { font-size: .95rem; font-weight: 600; color: var(--black); margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--light); margin-bottom: 0; }
+
+.success-actions { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+.success-btn { display: inline-block; background: var(--black); color: #fff; text-decoration: none;
+  font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: 1rem 2rem; transition: background .25s; }
+.success-btn:hover { background: var(--gold); }
+.success-btn.ghost { background: transparent; color: var(--black); border: 1px solid var(--light); }
+.success-btn.ghost:hover { background: transparent; border-color: var(--dark); color: var(--gold); }
+
+/* Account / order history */
+.account-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  margin-bottom: 3rem; flex-wrap: wrap; }
+.account-email { color: var(--mid); font-size: .85rem; }
+.account-signout { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--mid); background: none; border: 1px solid var(--light); padding: .6rem 1.1rem; cursor: pointer; transition: color .2s, border-color .2s; }
+.account-signout:hover { color: var(--black); border-color: var(--dark); }
+.account-empty { color: var(--mid); font-size: .9rem; padding: 3rem 0; }
+
+.order-list { display: flex; flex-direction: column; gap: 1.4rem; }
+.order-card { border: 1px solid var(--light); background: var(--white); }
+.order-card-head { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--light); }
+.order-ref { font-family: 'DM Mono', monospace; font-size: .8rem; color: var(--black); }
+.order-date { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); margin-top: .3rem; }
+.order-status { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; padding: .35rem .7rem; border-radius: 2px; border: 1px solid var(--light); color: var(--mid); }
+.order-status.s-paid, .order-status.s-fulfilled, .order-status.s-shipped { color: #1f6b3a; border-color: rgba(31,107,58,.3); }
+.order-status.s-pending { color: var(--gold); border-color: rgba(184,148,74,.35); }
+.order-status.s-cancelled, .order-status.s-refunded { color: #7a2222; border-color: rgba(122,34,34,.3); }
+.order-items { padding: .6rem 1.5rem; }
+.order-item { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px solid var(--light); font-size: .84rem; color: var(--dark); }
+.order-item:last-child { border-bottom: none; }
+.order-total { display: flex; justify-content: space-between; padding: 1rem 1.5rem; background: var(--off);
+  border-top: 1px solid var(--light); font-size: .9rem; font-weight: 600; }
+
+@media (max-width: 480px) { .success-actions { flex-direction: column; } .success-btn { width: 100%; } }

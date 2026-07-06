@@ -1,35 +1,86 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
+import AnnouncementBar from '@/components/AnnouncementBar';
+import SignOutButton from '@/components/SignOutButton';
 import { createClient } from '@/lib/supabase/server';
 
-export const metadata = { title: 'Account · CARAZIN' };
+export const metadata: Metadata = { title: 'Account · CARAZIN', robots: { index: false } };
 
-// Protected page. Order history is populated in Phase 4.
+const money = (cents: number) => '$' + (cents / 100).toFixed(2);
+
+const STATUS_LABEL: Record<string, string> = {
+  pending: 'Processing', paid: 'Paid', fulfilled: 'Fulfilled',
+  shipped: 'Shipped', cancelled: 'Cancelled', refunded: 'Refunded',
+};
+
+type OrderItem = { name: string; price_cents: number; quantity: number };
+type Order = {
+  id: string; status: string; total_cents: number; created_at: string;
+  order_items: OrderItem[];
+};
+
 export default async function AccountPage() {
   const supabase = await createClient();
   if (!supabase) redirect('/');
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/');
 
+  const { data } = await supabase
+    .from('orders')
+    .select('id, status, total_cents, created_at, order_items(name, price_cents, quantity)')
+    .order('created_at', { ascending: false });
+  const orders = (data as Order[]) ?? [];
+
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--off)', padding: '8rem 6vw 4rem', cursor: 'auto' }}>
-      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: '.6rem', letterSpacing: '.3em', textTransform: 'uppercase', color: 'var(--gold)' }}>
-        Account
-      </div>
-      <h1 style={{ fontWeight: 300, fontSize: '2rem', margin: '.6rem 0 .3rem' }}>Your orders</h1>
-      <p style={{ color: 'var(--mid)', fontSize: '.85rem' }}>Signed in as {user.email}</p>
+    <div className="site-page">
+      <AnnouncementBar />
+      <SiteHeader />
+      <main className="info-main">
+        <header className="account-head">
+          <div>
+            <div className="sec-eyebrow">Account</div>
+            <h1 className="info-title" style={{ marginBottom: '.3rem' }}>Your orders</h1>
+            <p className="account-email">Signed in as {user.email}</p>
+          </div>
+          <SignOutButton />
+        </header>
 
-      <p style={{ color: 'var(--mid)', fontSize: '.85rem', marginTop: '2.5rem' }}>
-        No orders yet.
-      </p>
-
-      <Link href="/" style={{
-        display: 'inline-block', marginTop: '2.5rem', fontFamily: "'DM Mono', monospace",
-        fontSize: '.62rem', letterSpacing: '.2em', textTransform: 'uppercase', color: '#fff',
-        background: 'var(--black)', padding: '1rem 2rem', textDecoration: 'none',
-      }}>
-        ← Back to store
-      </Link>
-    </main>
+        {orders.length === 0 ? (
+          <div className="account-empty">
+            <p>No orders yet.</p>
+            <Link href="/shop" className="success-btn" style={{ marginTop: '1.4rem' }}>Start shopping</Link>
+          </div>
+        ) : (
+          <div className="order-list">
+            {orders.map((o) => (
+              <article className="order-card" key={o.id}>
+                <div className="order-card-head">
+                  <div>
+                    <div className="order-ref">Order #{o.id.slice(0, 8).toUpperCase()}</div>
+                    <div className="order-date">
+                      {new Date(o.created_at).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                  </div>
+                  <div className={`order-status s-${o.status}`}>{STATUS_LABEL[o.status] || o.status}</div>
+                </div>
+                <div className="order-items">
+                  {o.order_items?.map((it, i) => (
+                    <div className="order-item" key={i}>
+                      <span>{it.name} <span className="order-item-qty">× {it.quantity}</span></span>
+                      <span>{money(it.price_cents * it.quantity)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="order-total"><span>Total</span><span>{money(o.total_cents)} CAD</span></div>
+              </article>
+            ))}
+          </div>
+        )}
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

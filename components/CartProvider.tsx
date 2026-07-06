@@ -19,6 +19,7 @@ type CartContextValue = {
   add: (slug: string, qty?: number) => Promise<void>;
   setQty: (productId: string, qty: number) => Promise<void>;
   remove: (productId: string) => Promise<void>;
+  clear: () => void;
   toast: (msg: string, err?: boolean) => void;
   toasts: Toast[];
 };
@@ -155,11 +156,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const remove = useCallback((productId: string) => setQty(productId, 0), [setQty]);
 
+  // Clear the local cart view after a successful purchase (the server-side cart
+  // is emptied by the Stripe webhook; this just syncs the UI without a reload).
+  const clear = useCallback(() => { writeGuest({}); setItems([]); }, []);
+
   const totals = useMemo(() => computeTotals(items), [items]);
   const count = useMemo(() => items.reduce((s, l) => s + l.quantity, 0), [items]);
 
   const value: CartContextValue = {
-    items, totals, count, open, setOpen, add, setQty, remove, toast, toasts,
+    items, totals, count, open, setOpen, add, setQty, remove, clear, toast, toasts,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
