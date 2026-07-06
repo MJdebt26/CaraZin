@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
+import AnnouncementBar from '@/components/AnnouncementBar';
 import { getProducts } from '@/lib/products-server';
 
 export const metadata = { title: 'Shop · CARAZIN' };
@@ -9,6 +11,7 @@ export default async function ShopPage() {
 
   return (
     <div className="site-page">
+      <AnnouncementBar />
       <SiteHeader />
       <main className="shop-main">
         <div className="shop-head">
@@ -38,6 +41,7 @@ export default async function ShopPage() {
           </div>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }

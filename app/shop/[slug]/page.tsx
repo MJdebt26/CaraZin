@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
+import AnnouncementBar from '@/components/AnnouncementBar';
 import AddToCart from '@/components/AddToCart';
 import { getProductBySlug, getProducts } from '@/lib/products-server';
 
@@ -20,6 +22,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="site-page">
+      <AnnouncementBar />
       <SiteHeader />
       <main className="pdp-main">
         <Link href="/shop" className="pdp-back">← All products</Link>
@@ -72,6 +75,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </section>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }
