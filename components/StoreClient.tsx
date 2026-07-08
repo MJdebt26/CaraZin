@@ -13,9 +13,16 @@ export default function StoreClient() {
 
   // Mark the landing page so global `cursor:none` (for the custom BMW cursor)
   // applies only here — the standalone shop/account pages use a normal cursor.
+  // Also mount the fixed "key light" spotlight + stage vignette layers.
   useEffect(() => {
     document.body.classList.add('landing');
-    return () => document.body.classList.remove('landing');
+    const vig = document.createElement('div'); vig.id = 'cz-vignette';
+    const spot = document.createElement('div'); spot.id = 'cz-spot';
+    document.body.appendChild(vig); document.body.appendChild(spot);
+    return () => {
+      document.body.classList.remove('landing');
+      vig.remove(); spot.remove();
+    };
   }, []);
 
   // Run the ported storefront behaviour once, plus newsletter feedback.

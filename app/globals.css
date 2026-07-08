@@ -1,12 +1,77 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
+  /* ── SHOWROOM "Aurora Bay" design system ──
+     Dark blue-black product theatre. Semantic tokens drive every surface. */
+  --bg:            #07080B;
+  --bg-deep:       #040507;
+  --surface:       #0E1016;
+  --surface-raised:#141721;
+  --surface-hi:    #1A1E2A;
+  --glass:         rgba(20,23,33,0.55);
+  --glass-hi:      rgba(255,255,255,0.06);
+  --ink:           #F4F5F7;
+  --ink-muted:     #9A9DA8;
+  --ink-faint:     #5A5E6B;
+  --line:          rgba(255,255,255,0.09);
+  --line-strong:   rgba(255,255,255,0.16);
+  --hairline:      rgba(255,255,255,0.09);
+  /* Brass gold — anodized trim catching light (craft + price only) */
+  --accent:        #C9A24B;
+  --accent-bright: #E7C879;
+  --accent-deep:   #8C6A2E;
+  --accent-glow:   rgba(231,200,121,0.22);
+  --accent-foil-a: #8C6A2E;
+  --accent-foil-b: #E7C879;
+  /* Cool signal — live / tech / focus state ONLY (flashlight discipline) */
+  --signal:        #6FA8FF;
+  --signal-deep:   #2E5F9E;
+  --signal-glow:   rgba(111,168,255,0.20);
+  /* M-tricolor — used exactly once (nav underline) */
+  --tri-light:     #5FB0E0;
+  --tri-blue:      #1C3F8F;
+  --tri-red:       #C8102E;
+  --spot-warm:     rgba(231,200,121,0.14);
+  --spot-cool:     rgba(111,168,255,0.10);
+  --danger:        #C24A4A;
+  --success:       #4F9E6A;
+  --danger-line:   rgba(194,74,74,0.32);
+  --success-line:  rgba(79,158,106,0.32);
+  /* Light-mode surfaces (warm ivory) — inverted beats + a few contrast panels */
+  --light-bg:      #F4F1EA;
+  --light-surface: #FBFAF6;
+  --light-paper:   #EDE8DD;
+  --light-ink:     #14110D;
+  --light-ink-muted:#6E685C;
+  --light-line:    #D8D2C4;
+  --radius:        3px;
+  --radius-lg:     6px;
+  --radius-pill:   999px;
+  --shadow-card:   0 18px 45px rgba(0,0,0,0.45);
+  --shadow-lift:   0 24px 70px rgba(0,0,0,0.55);
+  --shadow-bloom:  0 0 40px var(--accent-glow);
+  --shadow-drawer: -24px 0 70px rgba(0,0,0,0.6);
+  --blur-glass:    blur(14px) saturate(1.4);
+  --ease-expo:     cubic-bezier(.16,1,.3,1);
+  --ease-power:    cubic-bezier(.23,1,.32,1);
+  --ease-spring:   cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:      180ms;
+  --dur-base:      280ms;
+  --dur-slow:      1100ms;
+  --nav-h:         64px;
+  --font-display:  'Fraunces', Georgia, serif;
+  --font-body:     'Inter', system-ui, sans-serif;
+  --font-mono:     'DM Mono', ui-monospace, monospace;
+
+  /* Legacy aliases — kept at original light values so store.css keeps rendering
+     correctly until each store surface is migrated to the tokens above. Removed
+     once the migration is complete. */
   --white: #ffffff;
   --off:   #f7f7f5;
   --light: #e8e8e5;
   --mid:   #9a9a96;
   --dark:  #2a2a2a;
   --black: #0a0a0a;
-  --gold:  #b8944a;
+  --gold:  var(--accent);
 }
 html { scroll-behavior: smooth; }
 body { background: var(--white); color: var(--black); font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.6; overflow-x: hidden; cursor: none; }
@@ -361,6 +426,187 @@ footer { background: var(--black); border-top:1px solid rgba(255,255,255,.06); p
 
 /* ── REVEAL ── */
 .reveal { opacity:0; transform:translateY(24px); }
+.rule { transform: scaleX(0); transform-origin: left; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHOWROOM "AURORA BAY" — landing theatre re-skin
+   Dark blue-black product theatre layered over the base rules above. The cursor
+   is the key light; brass gold marks craft/price; Fraunces carries the drama.
+   ═══════════════════════════════════════════════════════════════════════════ */
+body { background: var(--bg); color: var(--ink); }
+
+/* Fixed light layers: cursor spotlight + a soft top vignette (the "stage") */
+#cz-spot {
+  position: fixed; inset: 0; z-index: 4; pointer-events: none; opacity: 0;
+  background: radial-gradient(380px circle at var(--mx,50%) var(--my,50%), var(--spot-warm), transparent 62%);
+  mix-blend-mode: screen; transition: opacity .6s ease;
+}
+body.landing #cz-spot { opacity: 1; }
+#cz-vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(135% 100% at 50% -20%, transparent 52%, rgba(0,0,0,.5));
+}
+
+/* Display type → Fraunces */
+.sec-title { font-family: var(--font-display); font-weight: 300; font-variation-settings: 'opsz' 72; letter-spacing: -.015em; color: var(--ink); }
+.sec-title strong { font-family: var(--font-display); font-weight: 400; color: var(--accent); }
+.sec-body { color: var(--ink-muted); }
+.sec-eyebrow { color: var(--ink-muted); }
+.sec-eyebrow::before { background: var(--line-strong); }
+
+/* Gold-foil period — a headline ending in a full stop gets a brass disc */
+.foil-dot { color: transparent; position: relative; }
+.foil-dot::after {
+  content: ''; position: absolute; bottom: .12em; margin-left: .04em;
+  width: .16em; height: .16em; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--accent-bright), var(--accent-deep));
+  box-shadow: 0 0 .5em var(--accent-glow);
+}
+
+/* ── NAV → liquid-glass bar ── */
+nav {
+  background: var(--glass); -webkit-backdrop-filter: var(--blur-glass); backdrop-filter: var(--blur-glass);
+  border-bottom: 1px solid var(--line); box-shadow: inset 0 1px 0 var(--glass-hi);
+}
+.nav-logo, nav.light .nav-logo { color: var(--ink); }
+.nav-links a, nav.light .nav-links a { color: rgba(255,255,255,.68); }
+.nav-links a:hover, nav.light .nav-links a:hover { color: var(--ink); }
+.nav-shop, nav.light .nav-shop { color: rgba(255,255,255,.7); border-color: var(--line-strong); }
+.nav-shop:hover, nav.light .nav-shop:hover { color: var(--bg); background: var(--accent-bright); border-color: var(--accent-bright); }
+.nav-auth, nav.light .nav-auth { color: rgba(255,255,255,.7); }
+.nav-auth:hover, nav.light .nav-auth:hover { color: var(--ink); }
+/* M-tricolor underline — the ONE place tricolor appears */
+.nav-links a { position: relative; }
+.nav-links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; transform: scaleX(0); transform-origin: left;
+  background: linear-gradient(90deg, var(--tri-light) 0 33%, var(--tri-blue) 33% 66%, var(--tri-red) 66% 100%);
+  transition: transform .26s var(--ease-power);
+}
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* ── HERO ── */
+.hero { background: var(--bg-deep); }
+.hero-bg img { filter: brightness(.5) contrast(1.12) saturate(1.05); }
+.hero-bg::after { background: linear-gradient(to top, var(--bg-deep) 0%, rgba(4,5,7,.35) 45%, transparent 78%); }
+.hero::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(120% 80% at 20% 0%, var(--spot-cool), transparent 55%);
+  mix-blend-mode: screen; opacity: .8;
+}
+.hero-tag { color: var(--ink-muted); }
+.hero-h1 {
+  font-family: var(--font-display); font-weight: 300; font-variation-settings: 'opsz' 144;
+  font-size: clamp(2.8rem, 6.6vw, 6.4rem); line-height: .98; letter-spacing: -.02em; color: var(--ink);
+}
+.hero-h1 em { font-style: italic; font-weight: 400; color: var(--ink); font-variation-settings: 'opsz' 144; }
+.hero-sub { color: rgba(255,255,255,.5); }
+.scroll-line { background: linear-gradient(to bottom, var(--accent-bright), transparent); }
+.scroll-hint span { color: rgba(255,255,255,.4); }
+
+/* Hero morph beats → Fraunces italic */
+.hs-h { font-family: var(--font-display); font-weight: 400; font-style: italic; font-variation-settings: 'opsz' 144; }
+.hs-inside .hs-h { color: var(--accent-bright); text-shadow: 0 0 40px var(--accent-glow); }
+
+/* ── BUTTONS (global CTA state machine) ── */
+.btn-primary { background: var(--ink); color: var(--bg); }
+.btn-primary:hover { background: var(--accent-bright); color: var(--bg); }
+.btn-secondary { color: rgba(255,255,255,.7); border-color: var(--line-strong); }
+.btn-secondary:hover { color: var(--ink); border-color: var(--accent-bright); }
+
+/* ── MARQUEE ── */
+.mbar { background: var(--surface); border-top: 1px solid var(--line); }
+.mi { color: var(--ink-muted); }
+.msep { color: var(--accent); }
+
+/* ── STRIP ── */
+.strip, .strip-dark { background: var(--line); }
+
+/* ── PRODUCT GRID → theatre ── */
+.products-wrap { background: var(--bg); }
+.prod-grid, .p-card, .p-info { border-color: var(--line); }
+.p-img { background: var(--surface); position: relative; }
+/* Feather bright (white-background) product shots into the dark card edge so
+   they seat on the theatre instead of hard-edging as white rectangles. */
+.p-img::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 44px 14px rgba(7,8,11,.55);
+}
+.p-card { transition: background .3s var(--ease-power); }
+.p-card:hover { background: var(--surface); }
+.p-card[data-glow]:hover { box-shadow: inset 0 0 0 1px var(--accent-bright), var(--shadow-bloom); }
+.p-card[data-glow="red"]:hover { box-shadow: inset 0 0 0 1px rgba(200,16,46,.55), 0 0 40px rgba(200,16,46,.22); }
+.p-card[data-glow="cool"]:hover { box-shadow: inset 0 0 0 1px var(--signal), 0 0 40px var(--signal-glow); }
+.p-badge { background: var(--ink); color: var(--bg); }
+.p-name { font-family: var(--font-display); font-weight: 400; letter-spacing: -.01em; color: var(--ink); font-size: .95rem; }
+.p-desc { color: var(--ink-muted); }
+.p-price { font-family: var(--font-display); font-weight: 400; color: var(--ink); font-variant-numeric: tabular-nums; }
+.add-btn { border-color: var(--line-strong); color: var(--ink); }
+.add-btn:hover { background: var(--accent-bright); color: var(--bg); border-color: var(--accent-bright); }
+.prod-header { border-color: var(--line); }
+
+/* ── FEATURE SPLITS ── */
+.feature-split, .panel-split, .puddle-split, .cp-split, .keys-grid { border-color: var(--line); }
+.feat-img img, .puddle-img img { filter: brightness(.72) contrast(1.08) saturate(1.04); }
+.feat-cnt, .feat-cnt .sec-title, .feat-cnt .sec-body { color: var(--ink); }
+.feat-cnt { background: var(--surface); }
+.feat-cnt .sec-body { color: rgba(255,255,255,.62); }
+.feat-item { border-color: var(--line) !important; }
+.fi-name { color: var(--ink); }
+.fi-sub { color: var(--ink-muted); }
+.fi-price { color: var(--accent-bright); font-family: var(--font-display); }
+/* Light panels flip to dark surface for one cohesive theatre */
+.panel-left { background: var(--surface); }
+.panel-right, .puddle-cnt, .cp-cnt { background: var(--bg); }
+.panel-specs { background: var(--line); }
+.ps { background: var(--surface); }
+.ps-lbl { color: var(--ink-muted); }
+.ps-val { color: var(--ink); }
+.cp-img { background: var(--surface); }
+.cp-tag { border-color: var(--line-strong); color: var(--ink-muted); }
+.cpf { border-color: var(--line); }
+.cpf:first-child { border-color: var(--line); }
+.cpft { color: var(--ink); }
+.cpfs { color: var(--ink-muted); }
+
+/* ── KEYS (already dark) ── */
+.keys-section { background: var(--bg); }
+.k-card { background: var(--surface); }
+.k-card:hover { background: var(--surface-hi); }
+.k-name { color: var(--ink); }
+.k-sub { color: var(--ink-muted); }
+.k-price { color: var(--accent-bright); font-family: var(--font-display); }
+
+/* ── REVIEWS + WHY ── */
+.rev-section { background: var(--surface); border-color: var(--line); }
+.rev-grid { background: var(--line); }
+.rv { background: var(--surface); }
+.rv-stars { color: var(--accent-bright); }
+.rv-q { color: var(--ink); }
+.rv-name { color: var(--ink); }
+.why-wrap { background: var(--bg); border-color: var(--line); }
+.wi { border-color: var(--line); }
+.wit { color: var(--ink); }
+.bnum { color: var(--ink); font-family: var(--font-display); font-weight: 300; }
+.rdot { background: var(--accent); }
+.rline { background: repeating-linear-gradient(90deg, var(--line-strong) 0, var(--line-strong) 4px, transparent 4px, transparent 8px); }
+
+/* ── NEWSLETTER + FOOTER ── */
+.nl-wrap { background: var(--surface); border-color: var(--line); }
+.nl-in { border-color: var(--line-strong); color: var(--ink); }
+.nl-in:focus { border-color: var(--accent); }
+.nl-btn { background: var(--ink); color: var(--bg); }
+.nl-btn:hover { background: var(--accent-bright); }
+footer { background: var(--bg-deep); border-color: var(--line); }
+.f-logo { color: var(--ink); letter-spacing: .08em; }
+
+/* Fraunces on all landing display headlines that end in a period handled inline */
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  #cz-spot { display: none; }
+  .reveal, .rule { opacity: 1 !important; transform: none !important; }
+  .nav-links a::after { transition: none; }
+}
 
 @media(max-width:900px){
   .prod-grid{grid-template-columns:repeat(2,1fr);}
