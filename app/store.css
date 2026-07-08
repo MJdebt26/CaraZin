@@ -594,3 +594,185 @@ body:not(.landing) .cz-input { cursor: text; }
   border-top: 1px solid var(--light); font-size: .9rem; font-weight: 600; }
 
 @media (max-width: 480px) { .success-actions { flex-direction: column; } .success-btn { width: 100%; } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHOWROOM "AURORA BAY" — store surfaces re-skin (shop / PDP / cart / account)
+   Remap the legacy light vars → dark tokens for everything inside a store page,
+   then handle the exceptions (glass header, ink CTAs, dark badges, status).
+   Shared overlays (drawer / modal / toast) are re-skinned unconditionally so they
+   read dark on the landing too.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.site-page {
+  --off:   var(--surface);
+  --white: var(--surface-raised);
+  --light: var(--line);
+  --mid:   var(--ink-muted);
+  --dark:  var(--ink-soft);
+  --black: var(--ink);
+  --gold:  var(--accent);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Header → liquid glass */
+.site-header {
+  background: var(--glass); -webkit-backdrop-filter: var(--blur-glass); backdrop-filter: var(--blur-glass);
+  border-bottom: 1px solid var(--line); box-shadow: inset 0 1px 0 var(--glass-hi);
+}
+.sh-logo { color: var(--ink); }
+.sh-links a { color: var(--ink-muted); position: relative; }
+.sh-links a:hover { color: var(--ink); }
+.sh-links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 2px; transform: scaleX(0); transform-origin: left;
+  background: linear-gradient(90deg, var(--tri-light) 0 33%, var(--tri-blue) 33% 66%, var(--tri-red) 66% 100%);
+  transition: transform .26s var(--ease-power);
+}
+.sh-links a:hover::after { transform: scaleX(1); }
+.sh-btn { color: var(--ink-muted); }
+.sh-btn:hover { color: var(--ink); }
+.sh-cart { color: var(--ink); border-color: var(--line-strong); }
+.sh-cart:hover { color: var(--bg); background: var(--accent-bright); border-color: var(--accent-bright); }
+
+/* Announcement bar */
+.anno-bar { background: var(--bg-deep); border-bottom-color: var(--line); color: var(--ink-muted); }
+.anno-dot { color: var(--accent); }
+
+/* Display type → Fraunces */
+.shop-title, .info-title, .pdp-name, .success-title, .info-h2, .cz-modal h2 {
+  font-family: var(--font-display); font-weight: 300; letter-spacing: -.02em; color: var(--ink);
+}
+.shop-card-name, .rev-card-title { font-family: var(--font-display); font-weight: 400; }
+.shop-card-price, .pdp-price, .cz-item-price, .rev-summary-score, .success-row.total, .order-total, .info-stat-num {
+  font-family: var(--font-display);
+}
+
+/* Shop grid */
+.shop-card { background: var(--surface-raised); border-color: var(--line); }
+.shop-card:hover { box-shadow: var(--shadow-lift); transform: translateY(-4px); }
+.shop-card-img { background: var(--surface); position: relative; }
+.shop-card-img::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 44px 14px rgba(7,8,11,.5); }
+.shop-card-badge { background: var(--surface-hi); color: var(--ink); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.shop-card-noimg, .pdp-noimg { background: var(--surface-hi); }
+.shop-sub, .shop-count { color: var(--ink-muted); }
+.shop-count strong { color: var(--accent); }
+.shop-chip { border-color: var(--line); color: var(--ink-muted); }
+.shop-chip:hover { color: var(--ink); border-color: var(--line-strong); }
+.shop-chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.shop-sort label { color: var(--ink-muted); }
+.shop-sort select { background: var(--surface-raised); color: var(--ink); border-color: var(--line); }
+
+/* PDP */
+.pdp-media { background: var(--surface); border-color: var(--line); position: relative; overflow: hidden; }
+.pdp-media::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(58% 48% at 50% 54%, var(--spot-warm), transparent 72%); }
+.pdp-media img { position: relative; z-index: 1; }
+.pdp-media::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  box-shadow: inset 0 0 70px 18px rgba(7,8,11,.55); }
+.pdp-crumbs a { color: var(--ink-muted); }
+.pdp-crumb-current { color: var(--ink); }
+.pdp-badge { border-color: var(--line-strong); color: var(--accent); }
+.pdp-cur { color: var(--ink-muted); }
+.pdp-desc, .pdp-fit, .pdp-highlights li, .pdp-spec dd, .trust-item { color: var(--ink-soft); }
+.pdp-rating .rc-val { color: var(--ink); }
+.pdp-rating .rc-link { color: var(--ink-muted); }
+.pdp-fit span { color: var(--ink-muted); }
+.pdp-meta { border-color: var(--line); }
+.pdp-perks li { color: var(--ink-muted); }
+
+/* Trust row + accordion */
+.trust-row { border-color: var(--line); }
+.trust-item svg { color: var(--accent); }
+.pdp-acc details { border-color: var(--line); }
+.pdp-acc summary, .faq-q { color: var(--ink); }
+.pdp-acc-body p, .faq-a { color: var(--ink-muted); }
+.pdp-acc-body a, .info-lead a, .info-body a, .info-note a { color: var(--accent-bright); }
+.pdp-spec dt { color: var(--ink-muted); }
+.pdp-spec { border-color: var(--line); }
+.pdp-spec { border-bottom-color: var(--line); }
+.faq-list, .faq-item { border-color: var(--line); }
+
+/* Reviews block */
+.pdp-reviews { border-color: var(--line); }
+.rev-cards { background: var(--line); border-color: var(--line); }
+.rev-card { background: var(--surface-raised); }
+.rev-card-title, .rev-card-author, .rev-summary-score { color: var(--ink); }
+.rev-card-body { color: var(--ink-soft); }
+.rev-card-meta, .rev-summary-count, .rev-dist-label, .rev-dist-pct { color: var(--ink-muted); }
+.rev-dist-track { background: var(--line); }
+.stars-bg { color: var(--line-strong); }
+
+/* Buttons — ink base, brass hover, dark text */
+.pdp-add, .cz-btn, .success-btn, .nl-btn { background: var(--ink); color: var(--bg); border: none; }
+.pdp-add:hover:not(:disabled), .cz-btn:hover, .success-btn:hover, .nl-btn:hover { background: var(--accent-bright); color: var(--bg); }
+.success-btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line-strong); }
+.success-btn.ghost:hover { background: transparent; border-color: var(--accent-bright); color: var(--accent-bright); }
+.pdp-qty { border-color: var(--line-strong); background: var(--surface); }
+.pdp-qty button, .pdp-qty span { color: var(--ink); }
+.pdp-qty button:hover { color: var(--accent-bright); }
+
+/* Status colors — legible on dark */
+.pdp-stock.in, .order-status.s-paid, .order-status.s-fulfilled, .order-status.s-shipped, .success-status.paid { color: var(--success); }
+.pdp-stock.out, .order-status.s-cancelled, .order-status.s-refunded { color: var(--danger); }
+.rev-verified { color: var(--success); border-color: var(--success-line); }
+.order-status.s-pending, .success-status.pending { color: var(--accent-bright); border-color: rgba(231,200,121,.35); }
+.order-status { border-color: var(--line); color: var(--ink-muted); }
+
+/* Info / success / account surfaces */
+.info-lead, .info-body p, .info-note { color: var(--ink-soft); }
+.info-section { border-color: var(--line); }
+.info-stats { background: var(--line); border-color: var(--line); }
+.info-stat { background: var(--surface-raised); }
+.info-stat-cap, .info-value p { color: var(--ink-muted); }
+.info-value { border-top-color: var(--accent); }
+.info-value-t { color: var(--ink); }
+.ship-table, .ship-row { border-color: var(--line); }
+.ship-head { background: var(--surface); color: var(--ink-muted); }
+.ship-row { color: var(--ink-soft); }
+.success-card, .order-card { background: var(--surface-raised); border-color: var(--line); }
+.success-card-head, .order-card-head { border-color: var(--line); }
+.success-totals, .order-total { background: var(--surface); border-color: var(--line); }
+.success-row { color: var(--ink-soft); }
+.success-row.total, .order-total { color: var(--ink); }
+.success-lead { color: var(--ink-soft); }
+.success-lead strong, .success-ref, .order-ref { color: var(--ink); }
+.success-mark { background: var(--success-line); color: var(--success); }
+.success-item, .order-item { border-color: var(--line); color: var(--ink-soft); }
+.account-email, .order-date { color: var(--ink-muted); }
+.account-signout { color: var(--ink-muted); border-color: var(--line-strong); }
+.account-signout:hover { color: var(--ink); border-color: var(--accent-bright); }
+.account-empty { color: var(--ink-muted); }
+
+/* Footer trust badges */
+.f-badge { border-color: rgba(231,200,121,.35); color: var(--accent-bright); }
+
+/* ── Shared overlays — dark on ALL pages (landing + store) ── */
+#cz-drawer { background: var(--surface); color: var(--ink); box-shadow: var(--shadow-drawer); }
+.cz-head { border-color: var(--line); }
+.cz-head h3 { color: var(--ink); }
+.cz-close { color: var(--ink-muted); }
+.cz-close:hover { color: var(--ink); }
+.cz-empty { color: var(--ink-muted); }
+.cz-item { border-color: var(--line); }
+.cz-item-name { color: var(--ink); }
+.cz-item-fit { color: var(--ink-muted); }
+.cz-qty button { background: var(--surface-hi); border-color: var(--line); color: var(--ink); }
+.cz-qty button:hover { border-color: var(--line-strong); }
+.cz-item-price { color: var(--ink); font-family: var(--font-display); }
+.cz-remove { color: var(--ink-muted); }
+.cz-remove:hover { color: var(--danger); }
+.cz-foot { background: var(--surface-raised); border-color: var(--line); }
+.cz-row { color: var(--ink-soft); }
+.cz-row.total { color: var(--ink); border-color: var(--line); }
+.cz-ship-note { color: var(--accent-bright); }
+.cz-secure { color: var(--ink-muted); }
+.cz-modal { background: var(--surface); color: var(--ink); }
+.cz-modal .eyebrow { color: var(--accent); }
+.cz-modal h2 { color: var(--ink); }
+.cz-input { background: var(--surface-raised); border-color: var(--line); color: var(--ink); }
+.cz-input:focus { border-color: var(--accent); }
+.cz-modal label, .cz-form label { color: var(--ink-muted); }
+.cz-modal-close, .cz-switch { color: var(--ink-muted); }
+.cz-switch button { color: var(--ink); }
+.cz-back { color: var(--ink-muted); }
+.cz-toast { background: var(--surface-hi); color: var(--ink); border: 1px solid var(--line); }
+.cz-toast.err { background: #3a1a1a; border-color: var(--danger-line); }
