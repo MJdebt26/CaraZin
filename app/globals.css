@@ -532,8 +532,8 @@ nav {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   box-shadow: inset 0 0 44px 14px rgba(7,8,11,.55);
 }
-.p-card { transition: background .3s var(--ease-power); }
-.p-card:hover { background: var(--surface); }
+.p-card { transition: background .3s var(--ease-power), box-shadow .3s var(--ease-power); }
+.p-card:hover { background: var(--surface); box-shadow: inset 0 0 0 1px rgba(231,200,121,.32), 0 0 40px var(--accent-glow); }
 .p-card[data-glow]:hover { box-shadow: inset 0 0 0 1px var(--accent-bright), var(--shadow-bloom); }
 .p-card[data-glow="red"]:hover { box-shadow: inset 0 0 0 1px rgba(200,16,46,.55), 0 0 40px rgba(200,16,46,.22); }
 .p-card[data-glow="cool"]:hover { box-shadow: inset 0 0 0 1px var(--signal), 0 0 40px var(--signal-glow); }
