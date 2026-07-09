@@ -153,7 +153,7 @@ nav.light .nav-auth:hover { color: var(--black); }
   letter-spacing: .14em; text-transform: uppercase; color: var(--mid); margin-bottom: .35rem; }
 .cz-input { width: 100%; padding: .7rem .8rem; border: 1px solid var(--light); background: var(--white);
   font-family: 'Inter', sans-serif; font-size: .8rem; color: var(--black); cursor: text; }
-.cz-input:focus { outline: none; border-color: var(--dark); }
+.cz-input:focus { border-color: var(--dark); }
 .cz-back { font-family: 'DM Mono', monospace; font-size: .56rem; letter-spacing: .14em; text-transform: uppercase;
   color: var(--mid); background: none; border: none; cursor: none; margin-bottom: 1rem; }
 .cz-back:hover { color: var(--black); }
@@ -514,7 +514,7 @@ body:not(.landing) .cz-input { cursor: text; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239a9a96' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right .8rem center;
 }
-.shop-sort select:focus { outline: none; border-color: var(--dark); }
+.shop-sort select:focus { border-color: var(--dark); }
 
 .shop-count { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .1em;
   text-transform: uppercase; color: var(--mid); margin-bottom: 1.8rem; }
@@ -652,6 +652,7 @@ body:not(.landing) .cz-input { cursor: text; }
 .shop-card-img { background: var(--surface); position: relative; }
 .shop-card-img::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 44px 14px rgba(7,8,11,.5); }
 .shop-card-badge { background: var(--surface-hi); color: var(--ink); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.shop-card-sold { background: #3a1a1a; color: var(--danger-ink); border: 1px solid var(--danger-line); }
 .shop-card-noimg, .pdp-noimg { background: var(--surface-hi); }
 .shop-sub, .shop-count { color: var(--ink-muted); }
 .shop-count strong { color: var(--accent); }
@@ -712,7 +713,7 @@ body:not(.landing) .cz-input { cursor: text; }
 
 /* Status colors — legible on dark */
 .pdp-stock.in, .order-status.s-paid, .order-status.s-fulfilled, .order-status.s-shipped, .success-status.paid { color: var(--success); }
-.pdp-stock.out, .order-status.s-cancelled, .order-status.s-refunded { color: var(--danger); }
+.pdp-stock.out, .order-status.s-cancelled, .order-status.s-refunded { color: var(--danger-ink); }
 .rev-verified { color: var(--success); border-color: var(--success-line); }
 .order-status.s-pending, .success-status.pending { color: var(--accent-bright); border-color: rgba(231,200,121,.35); }
 .order-status { border-color: var(--line); color: var(--ink-muted); }
@@ -759,7 +760,7 @@ body:not(.landing) .cz-input { cursor: text; }
 .cz-qty button:hover { border-color: var(--line-strong); }
 .cz-item-price { color: var(--ink); font-family: var(--font-display); }
 .cz-remove { color: var(--ink-muted); }
-.cz-remove:hover { color: var(--danger); }
+.cz-remove:hover { color: var(--danger-ink); }
 .cz-foot { background: var(--surface-raised); border-color: var(--line); }
 .cz-row { color: var(--ink-soft); }
 .cz-row.total { color: var(--ink); border-color: var(--line); }
@@ -776,3 +777,7 @@ body:not(.landing) .cz-input { cursor: text; }
 .cz-back { color: var(--ink-muted); }
 .cz-toast { background: var(--surface-hi); color: var(--ink); border: 1px solid var(--line); }
 .cz-toast.err { background: #3a1a1a; border-color: var(--danger-line); }
+
+/* Hero morph beats ("Inside" / "And·Out") → Fraunces italic. Declared here so it
+   wins over the base .hs-h in this same file (store.css loads after globals.css). */
+.hs-h { font-family: var(--font-display); font-weight: 400; font-style: italic; }

@@ -34,6 +34,7 @@
   --spot-warm:     rgba(231,200,121,0.14);
   --spot-cool:     rgba(111,168,255,0.10);
   --danger:        #C24A4A;
+  --danger-ink:    #E87A7A;
   --success:       #4F9E6A;
   --danger-line:   rgba(194,74,74,0.32);
   --success-line:  rgba(79,158,106,0.32);
@@ -442,7 +443,14 @@ body { background: var(--bg); color: var(--ink); }
   background: radial-gradient(380px circle at var(--mx,50%) var(--my,50%), var(--spot-warm), transparent 62%);
   mix-blend-mode: screen; transition: opacity .6s ease;
 }
-body.landing #cz-spot { opacity: 1; }
+/* Only paint the key-light on fine pointers (it tracks mousemove; on touch it
+   would freeze dead-centre) and when motion is welcome. */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  body.landing #cz-spot { opacity: 1; }
+}
+
+/* Keyboard focus ring — high-contrast cool signal, visible on every dark surface. */
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 #cz-vignette {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background: radial-gradient(135% 100% at 50% -20%, transparent 52%, rgba(0,0,0,.5));
@@ -501,7 +509,7 @@ nav {
 }
 .hero-h1 em { font-style: italic; font-weight: 400; color: var(--ink); font-variation-settings: 'opsz' 144; }
 .hero-sub { color: rgba(255,255,255,.5); }
-.scroll-line { background: linear-gradient(to bottom, var(--accent-bright), transparent); }
+.scroll-line { background: linear-gradient(to bottom, var(--ink-muted), transparent); }
 .scroll-hint span { color: rgba(255,255,255,.4); }
 
 /* Hero morph beats → Fraunces italic */
@@ -588,7 +596,7 @@ nav {
 .wi { border-color: var(--line); }
 .wit { color: var(--ink); }
 .bnum { color: var(--ink); font-family: var(--font-display); font-weight: 300; }
-.rdot { background: var(--accent); }
+.rdot { background: var(--ink); }
 .rline { background: repeating-linear-gradient(90deg, var(--line-strong) 0, var(--line-strong) 4px, transparent 4px, transparent 8px); }
 
 /* ── NEWSLETTER + FOOTER ── */
@@ -607,6 +615,13 @@ footer { background: var(--bg-deep); border-color: var(--line); }
   #cz-spot { display: none; }
   .reveal, .rule { opacity: 1 !important; transform: none !important; }
   .nav-links a::after { transition: none; }
+}
+
+/* Touch / no-hover devices: no mousemove drives the custom cursor, so hide it and
+   restore a native cursor instead of leaving the roundel frozen at the corner. */
+@media (pointer: coarse), (hover: none) {
+  body.landing { cursor: auto; }
+  #cur, #cur-ring, #cz-spot { display: none; }
 }
 
 @media(max-width:900px){
