@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getProducts } from '@/lib/products-server';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carazin.ca';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.carazin.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getProducts();

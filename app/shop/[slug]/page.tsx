@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carazin.ca';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.carazin.com';
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

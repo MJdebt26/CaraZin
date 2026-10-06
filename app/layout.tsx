@@ -7,7 +7,7 @@ import { CartProvider } from '@/components/CartProvider';
 import CartDrawer from '@/components/CartDrawer';
 import AuthModal from '@/components/AuthModal';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://carazin.ca';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.carazin.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
